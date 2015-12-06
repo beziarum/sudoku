@@ -38,10 +38,8 @@
 ;;test si la valeur est deja presente dans la ligne
 
 (defun test-ligne(grid l valeur)
-  (loop for i below +size+
-      do (if (eq(aref grid l i)valeur)
-	     NIL
-	     T)))
+  (loop for i below +size+ always (eq (aref grid l i) valeur)
+      finally (return T)))
 
 ;;test si la valeur est deja presente dans le carré
 
