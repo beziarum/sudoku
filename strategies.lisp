@@ -18,6 +18,50 @@
 		(0 6 0 5 0 0 0 0 0)
 		(0 8 0 0 1 6 0 0 0)
 		(5 0 0 2 0 0 0 0 7))))
+		
+		
+
+
+(defun test-colonne(grid c valeur)
+  (loop for i below +size+ never (eq(aref grid i c)valeur)
+       finally (return T)))
+
+;;test si la valeur est deja presente dans la ligne
+
+(defun test-ligne(grid l valeur)
+  (loop for i below +size+ never (eq (aref grid l i) valeur)
+      finally (return T)))
+
+;;test si la valeur est deja presente dans le carré
+
+(defun test-carre(grid c l valeur)
+  (let ((x (* (floor (/ l +CARRE-SIZE+)) +CARRE-SIZE+))
+       (y (* (floor (/ c +CARRE-SIZE+)) +CARRE-SIZE+)))
+    (loop for i from x to (-(+ x +CARRE-SIZE+)1) 
+       always (loop for j from y to (-(+ y +CARRE-SIZE+)1) never (eq(aref grid i j)valeur)
+       finally(return T)))))
+
+
+
+(defun test-valeur(grid c l valeur)
+  (if (and (test-ligne grid l valeur)
+	   (test-colonne grid c valeur)
+	   (test-carre grid c l valeur)
+	   (eq(aref grid l c) 0))
+      T
+      NIL))
+
+(defun set-valeur(grid c l valeur)
+  (if (test-valeur grid c l valeur)
+      (setf(aref grid l c)valeur)
+      (print "Impossible d'atribuer cette valeur a cette case")))
+
+(defun delete-valeur(grid grid-copy c l)
+  (if (and (eq (aref grid-copy l c) 0) (not (eq (aref grid l c) 0)))
+      (setf (aref grid l c) 0)
+      (print "Impossible de suprimer cette valeur")))
+
+
 
 (defun grid-copy (grid)
   (let ((g (make-array '(9 9) :element-type (array-element-type grid))))
@@ -52,8 +96,12 @@
     (values k l)))
 		      
 		   
-		       
-	       
+(defun possibility-list (grid colonne ligne)
+	 (let ((l '()))
+	    (loop for i below 9
+	       do (if (test-valeur grid colonne ligne (+ 1 i))
+		      (cons i l)))))
+	      
 	     
 
 ;(defun test-case (grid colonne ligne) a voir selon les fontions de borde.
