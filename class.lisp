@@ -30,10 +30,8 @@
 ;;test si la valeur est deja presente dans la colone
 
 (defun test-colonne(grid c valeur)
-  (loop for i below +size+
-      do (if (eq(aref grid i c)valeur)
-	     NIL
-	     T)))
+  (loop for i below +size+ never (eq(aref grid i c)valeur)
+       finally (return T)))
 
 ;;test si la valeur est deja presente dans la ligne
 
@@ -44,10 +42,13 @@
 ;;test si la valeur est deja presente dans le carré
 
 (defun test-carre(grid c l valeur)
-  (let ((x (* (floor (/ c +CARRE-SIZE+)) +CARRE-SIZE+))
-       (y (* (floor (/ l +CARRE-SIZE+)) +CARRE-SIZE+)))
-    (loop for i from x to (+ x +CARRE-SIZE+)
-       do (loop for j from y to (+ y +CARRE-SIZE+)
-	     do (if (eq(aref grid x y)valeur)
-		    NIL
-		    T)))))
+  (let ((x (* (floor (/ l +CARRE-SIZE+)) +CARRE-SIZE+))
+       (y (* (floor (/ c +CARRE-SIZE+)) +CARRE-SIZE+)))
+    (print x)
+    (print y)
+    (loop for i from x to (-(+ x +CARRE-SIZE+)1) 
+       always (loop for j from y to (-(+ y +CARRE-SIZE+)1) never (eq(aref grid i j)valeur)
+	 do(print (aref grid i j))
+       finally(return T)))))
+
+
