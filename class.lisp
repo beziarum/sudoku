@@ -18,6 +18,19 @@
 		(0 8 0 0 1 6 0 0 0)
 		(5 0 0 2 0 0 0 0 7))))
 
+(defparameter +grid-copy+
+  (make-array '(9 9) :initial-contents
+	      '((1 0 0 0 0 4 0 0 5)
+		(0 0 0 9 5 0 0 8 0)
+		(0 0 0 0 0 3 0 9 0)
+		(0 0 5 0 0 2 0 0 4)
+		(0 0 1 0 6 0 7 0 0)
+		(7 0 0 3 0 0 2 0 0)
+		(0 6 0 5 0 0 0 0 0)
+		(0 8 0 0 1 6 0 0 0)
+		(5 0 0 2 0 0 0 0 7))))
+
+
 ;;effectue une copie d'une grille de jeux
 
 (defun grid-copy (grid)
@@ -53,6 +66,16 @@
   (if (and (test-ligne grid l valeur)
 	   (test-colonne grid c valeur)
 	   (test-carre grid c l valeur)
-	   (eq(aref grid c l) 0))
+	   (eq(aref grid l c) 0))
       T
       NIL))
+
+(defun set-valeur(grid c l valeur)
+  (if (test-valeur grid c l valeur)
+      (setf(aref grid l c)valeur)
+      (print "Impossible d'atribuer cette valeur a cette case")))
+
+(defun delete-valeur(grid grid-copy c l)
+  (if (and (eq (aref grid-copy l c) 0) (not (eq (aref grid l c) 0)))
+      (setf (aref grid l c) 0)
+      (print "Impossible de suprimer cette valeur")))
