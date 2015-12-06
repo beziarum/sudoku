@@ -123,14 +123,13 @@
       T
       NIL)))
 
-(defun sudoku-main (grid cgrid)
+(defun sudoku-main (grid g)
   (afficher-sudoku grid)
-  (print g)
   (play grid g)
   (if (win +grid+)
       (princ "vous avez gagné")
-      (sudoku-main grid)))
+      (sudoku-main grid g)))
 
 (defun sudoku(grid)
-  (let ((g (grid-copy grid ))) ;probleme a régler sa écrit aussi dans g
-    sudoku-main (grid g)))
+  (let ((g (grid-copy grid )))
+    (sudoku-main grid g)))
