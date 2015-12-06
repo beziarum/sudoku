@@ -1,3 +1,4 @@
+(load "affichage")
 
 ;; taille initial des grille de jeux
 (defparameter +SIZE+ 9)
@@ -62,20 +63,68 @@
        finally(return T)))))
 
 
-(defun test-valeur(grid c l valeur)
+(defun test-valeur (grid c l valeur)
   (if (and (test-ligne grid l valeur)
 	   (test-colonne grid c valeur)
 	   (test-carre grid c l valeur)
-	   (eq(aref grid l c) 0))
+	   (eq(aref grid l c) 0)
+	   (and(< valeur 10)(> valeur 0)))
       T
       NIL))
 
-(defun set-valeur(grid c l valeur)
-  (if (test-valeur grid c l valeur)
-      (setf(aref grid l c)valeur)
-      (print "Impossible d'atribuer cette valeur a cette case")))
 
-(defun delete-valeur(grid grid-copy c l)
+
+(defun set-valeur(grid c l valeur)
+  (setf(aref grid l c)valeur))
+
+
+(defun test-delete-valeur(grid grid-copy c l)
   (if (and (eq (aref grid-copy l c) 0) (not (eq (aref grid l c) 0)))
-      (setf (aref grid l c) 0)
-      (print "Impossible de suprimer cette valeur")))
+      T
+      NIL))
+
+(defun delete-valeur (grid c l)
+  (setf(aref grid l c)0))
+
+
+
+(defun play (grid grid-copy)
+  (let ((c (progn 
+	     (princ "colonne ? ")
+	     (read)))
+	(l (progn 
+	     (princ "ligne ? ")
+	     (read)))
+	(valeur (progn 
+		  (princ "valeur ? ")
+		  (read))))
+    (if (eq valeur 0)
+	(if (test-delete-valeur grid grid-copy c l)
+	    (delete-valeur grid c l)
+	    (progn
+	      (princ "Impossible de supprimer cette valeur")
+	      (play grid grid-copy)))
+	(if (test-valeur grid c l valeur)
+	    (set-valeur grid c l valeur)
+	    (progn
+	      (princ "Impossible d'atribuer cette valeur a cette case")
+	      (play grid grid-copy))))))
+
+
+
+(defun win (grid)
+  (let ((c 0))
+  (loop for i below +SIZE+
+       do (loop for j below +SIZE+
+	       do (if (eq(aref grid i j)0)
+		      (incf c))))
+  (if (eq c (* +SIZE+ +SIZE+))
+      T
+      NIL)))
+
+(defun sudoku()
+  (afficher-sudoku +grid+)
+  (play +grid+ +grid-copy+)
+  (if (win +grid+)
+      (princ "vous avez gagné")
+      (sudoku)))
