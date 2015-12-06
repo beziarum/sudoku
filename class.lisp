@@ -2,7 +2,7 @@
 ;; taille initial des grille de jeux
 (defparameter +SIZE+ 9)
 (defparameter +AREA+ (* +SIZE+ +SIZE+))
-(defparameter +CARRE-SIZE+)
+(defparameter +CARRE-SIZE+ 3)
 
 ;;grille initial du jeux
 
@@ -46,4 +46,10 @@
 ;;test si la valeur est deja presente dans le carré
 
 (defun test-carre(grid c l valeur)
-  let ((x (
+  (let ((x (* (floor (/ c +CARRE-SIZE+)) +CARRE-SIZE+))
+       (y (* (floor (/ l +CARRE-SIZE+)) +CARRE-SIZE+)))
+    (loop for i from x to (+ x +CARRE-SIZE+)
+       do (loop for j from y to (+ y +CARRE-SIZE+)
+	     do (if (eq(aref grid x y)valeur)
+		    NIL
+		    T)))))
