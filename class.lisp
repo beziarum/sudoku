@@ -35,7 +35,7 @@
 ;;effectue une copie d'une grille de jeux
 
 (defun grid-copy (grid)
-  (let ((g (make-array '(9 9) :element-type (array-element-type grid))))
+  (let ((g (make-array '(9 9))))
     (loop for i below 9
        do (loop for j below 9
 	     do (setf (aref g i j) (aref grid i j))))
@@ -79,7 +79,7 @@
 
 
 (defun test-delete-valeur(grid grid-copy c l)
-  (if (and (eq (aref grid-copy l c) 0) (not (eq (aref grid l c) 0)))
+  (if (and (zerop(aref grid-copy l c)) (not (zerop (aref grid l c))))
       T
       NIL))
 
@@ -90,15 +90,13 @@
 
 (defun play (grid grid-copy)
   (let ((c (progn 
-	     (princ "colonne ? ")
+	     (princ "COL LIG VAL? ")
 	     (read)))
-	(l (progn 
-	     (princ "ligne ? ")
-	     (read)))
-	(valeur (progn 
-		  (princ "valeur ? ")
-		  (read))))
-    (if (eq valeur 0)
+	(l  (read))
+	(valeur  (read)))
+    (decf c)
+    (decf l)
+    (if (zerop valeur)
 	(if (test-delete-valeur grid grid-copy c l)
 	    (delete-valeur grid c l)
 	    (progn
@@ -122,9 +120,11 @@
       T
       NIL)))
 
-(defun sudoku()
-  (afficher-sudoku +grid+)
-  (play +grid+ +grid-copy+)
+(defun sudoku(grid)
+  (let ((g (grid-copy grid ))) ;probleme a régler sa écrit aussi dans g
+  (afficher-sudoku grid)
+  (print g)
+  (play grid g)
   (if (win +grid+)
       (princ "vous avez gagné")
-      (sudoku)))
+      (sudoku grid))))
