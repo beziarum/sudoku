@@ -97,11 +97,12 @@
 		      
 		   
 (defun possibility-list (grid colonne ligne)
-	 (let ((l '()))
-	    (loop for i below 9
-	       do (if (test-valeur grid colonne ligne (+ 1 i))
-		      (cons i l)))))
-	      
+  (let ((l '()))
+    (loop for i below 9
+       do (if (test-valeur grid colonne ligne i)
+	      (push i l)))
+    l))
+
 	     
 
 ;(defun test-case (grid colonne ligne) a voir selon les fontions de borde.
