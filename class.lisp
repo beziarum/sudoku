@@ -44,11 +44,15 @@
 (defun test-carre(grid c l valeur)
   (let ((x (* (floor (/ l +CARRE-SIZE+)) +CARRE-SIZE+))
        (y (* (floor (/ c +CARRE-SIZE+)) +CARRE-SIZE+)))
-    (print x)
-    (print y)
     (loop for i from x to (-(+ x +CARRE-SIZE+)1) 
        always (loop for j from y to (-(+ y +CARRE-SIZE+)1) never (eq(aref grid i j)valeur)
-	 do(print (aref grid i j))
        finally(return T)))))
 
 
+(defun test-valeur(grid c l valeur)
+  (if (and (test-ligne grid l valeur)
+	   (test-colonne grid c valeur)
+	   (test-carre grid c l valeur)
+	   (eq(aref grid c l) 0))
+      T
+      NIL))
