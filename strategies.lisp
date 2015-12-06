@@ -56,13 +56,6 @@
       (setf(aref grid l c)valeur)
       (print "Impossible d'atribuer cette valeur a cette case")))
 
-(defun delete-valeur(grid grid-copy c l)
-  (if (and (eq (aref grid-copy l c) 0) (not (eq (aref grid l c) 0)))
-      (setf (aref grid l c) 0)
-      (print "Impossible de suprimer cette valeur")))
-
-
-
 (defun grid-copy (grid)
   (let ((g (make-array '(9 9) :element-type (array-element-type grid))))
     (loop for i below 9
@@ -70,41 +63,6 @@
 	     do (setf (aref g i j) (aref grid i j))))
     g))
 
-
-
-(defun test-colonne(grid c valeur)
-  (loop for i below +size+ never (eq(aref grid i c)valeur)
-       finally (return T)))
-
-;;test si la valeur est deja presente dans la ligne
-
-(defun test-ligne(grid l valeur)
-  (loop for i below +size+ never (eq (aref grid l i) valeur)
-      finally (return T)))
-
-;;test si la valeur est deja presente dans le carré
-
-(defun test-carre(grid c l valeur)
-  (let ((x (* (floor (/ l +CARRE-SIZE+)) +CARRE-SIZE+))
-       (y (* (floor (/ c +CARRE-SIZE+)) +CARRE-SIZE+)))
-    (loop for i from x to (-(+ x +CARRE-SIZE+)1) 
-       always (loop for j from y to (-(+ y +CARRE-SIZE+)1) never (eq(aref grid i j)valeur)
-       finally(return T)))))
-
-
-
-(defun test-valeur(grid c l valeur)
-  (if (and (test-ligne grid l valeur)
-	   (test-colonne grid c valeur)
-	   (test-carre grid c l valeur)
-	   (eq(aref grid l c) 0))
-      T
-      NIL))
-
-(defun set-valeur(grid c l valeur)
-  (if (test-valeur grid c l valeur)
-      (setf(aref grid l c)valeur)
-      (print "Impossible d'atribuer cette valeur a cette case")))
 
 (defun delete-valeur(grid grid-copy c l)
   (if (and (eq (aref grid-copy l c) 0) (not (eq (aref grid l c) 0)))
@@ -139,34 +97,27 @@
 		  (return)
 		  )))	 
     (values k l)))
-<<<<<<< HEAD
-=======
-		      
+	      
 		   
 (defun possibility-list (grid colonne ligne)
   (let ((l '()))
     (loop for i below 9
        do (if (test-valeur grid colonne ligne i)
-	      (push i l)))
-    l))
->>>>>>> fa44f1a30f7361e47c335ecab50ddaabdcdd4145
+	      (push i l)))))
 
-	     
 
-(defun possibility-list (grid colonne ligne)
-  (let ((l '()))
-    (loop for i below 9
-       do (if (test-valeur grid colonne ligne i)
-	      (push i l)))
-    l))
+(defun random-strat (grid)
+  (let ((place (random (number-of-zeroes +grid+))))
+    (multiple-value-bind (i j) (position-zero +grid+ place)
+      (loop for k below 9
+	 do (if (member k (possibility-list +grid+ i j))
+		(set-valeur +grid+ i j k))))))
 
-;(defun random-strat (grid)
- ; (let ((place (random (number-of-zeroes +grid+)))
-;	(value (random 9)))
- ;   (+ value 1) ;sale
     
     
     
+    
+ ; (print (nth (random (length *list*)) *list*))  
     
     
     
