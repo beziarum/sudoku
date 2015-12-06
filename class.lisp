@@ -1,4 +1,6 @@
 (load "affichage")
+(load "lecture")
+
 
 ;; taille initial des grille de jeux
 (defparameter +SIZE+ 9)
@@ -38,7 +40,8 @@
   (let ((g (make-array '(9 9))))
     (loop for i below 9
        do (loop for j below 9
-	     do (setf (aref g i j) (aref grid i j))))
+	     do (if (not(zerop(aref grid i j)))
+		    (setf(aref g i j)1))))
     g))
 
 ;;test si la valeur est deja presente dans la colone
@@ -94,7 +97,7 @@
 	     (read)))
 	(l  (read))
 	(valeur  (read)))
-    (decf c)
+    (setf c (transformation c))
     (decf l)
     (if (zerop valeur)
 	(if (test-delete-valeur grid grid-copy c l)
