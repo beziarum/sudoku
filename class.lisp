@@ -34,6 +34,18 @@
 		(0 8 0 0 1 6 0 0 0)
 		(5 0 0 2 0 0 0 0 7))))
 
+(defparameter +grid-facile+
+  (make-array '(9 9) :initial-contents
+	      '((9 2 0 0 0 0 0 3 8)
+		(0 0 0 5 0 0 7 2 0)
+		(0 0 1 2 0 0 0 0 6)
+		(5 9 0 6 0 0 3 0 0)
+		(1 3 1 9 0 5 0 6 4)
+		(0 0 7 0 0 4 0 9 2)
+		(7 0 0 0 0 6 2 0 0)
+		(0 4 8 0 0 9 0 0 0)
+		(2 5 0 0 0 0 0 8 7))))
+
 
 ;;effectue une copie d'une grille de jeux
 
