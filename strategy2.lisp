@@ -15,9 +15,26 @@
        do (loop for j from (- y lcarrey) below (- (+ y +CARRE-SIZE+) lcarrey)
 	     do (setf (aref grid i j) (remove e (aref grid i j)))))))
 
+(defun inclusive-colone (grid i j)
+  (let ((possible (aref grid i j)))
+    (loop for j below 9
+       do (setf possible (set-difference possible (aref grid i j))))
+    (if (null (cdr possible))
+	(car possible)
+	nil)))
 
-(let ((pgrid nil))
+(defun inclusive-ligne (grid i j)
+  (let ((possible (aref grid i j)))
+    (loop for i below 9
+	 do (setf possible (set-difference possible (aref grid i j))))
+    (if (null (cdr possible))
+	(car possible)
+	nil)))
+  
+(let ((pgrid nil)
+      (travail-grid nil))
   (defun initialise-tab-strat (grid)
+    (setf travail-grid grid)
     (setf pgrid (make-array '(9 9):initial-element '(1 2 3 4 5 6 7 8 9)))
     (loop for i below 9
        do (loop for j below 9
@@ -28,7 +45,15 @@
 		      (supprimer-carre pgrid (aref grid i j) i j)
 		      (setf (aref pgrid i j) nil))))))
 
+  (defun inclusive-standalone ()
+    (let ((ret nil))
+      (loop for i below 9 always (null ret)
+	 do (loop for j below 9 always (null ret)
+	       do (setf ret (inclusive-colone pgrid i j))))
+      ret))
+		   
 
+			 
   (defun main-standalone ()
     (let ((ret nil))
       (loop
@@ -47,12 +72,12 @@
       (values (car ret) (cadr ret) (caddr ret)))))
 
 
-(defun test-strat (init main grid)
-  (funcall init grid)
-  (labels ((intern-test-strat ()
-	     (multiple-value-bind (i j v) (funcall main)
-	       (if (not (null v))
-		   (progn (setf (aref grid j i) v)
-			  (afficher-sudoku grid)
-			  (intern-test-strat))))))
-    (intern-test-strat)))
+;; (defun test-strat (init main grid)
+;;   (funcall init grid)
+;;   (labels ((intern-test-strat ()
+;; 	     (multiple-value-bind (i j v) (time (funcall main)
+;; 	       (if (not (null v))
+;; 		   (progn (setf (aref grid j i) v)
+;; 			  (afficher-sudoku grid)
+;; 			  (intern-test-strat))))))
+;;     (intern-test-strat)))
