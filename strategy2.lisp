@@ -13,8 +13,6 @@
 	(lcarrey (mod y +CARRE-SIZE+)))
     (loop for i from (- x lcarrex) below (- (+ x +CARRE-SIZE+) lcarrex)
        do (loop for j from (- y lcarrey) below (- (+ y +CARRE-SIZE+) lcarrey)
-	     do (print i)
-	     do (print j)
 	     do (setf (aref grid i j) (remove e (aref grid i j)))))))
 
 
@@ -25,14 +23,9 @@
        do (loop for j below 9
 	     do (if (/= (aref grid i j) 0)
 		    (progn
-		      (print "1")
 		      (supprimer-colone pgrid (aref grid i j) j)
-		      (print "2")
 		      (supprimer-ligne pgrid (aref grid i j) i)
-		      (print "3")
-		      (supprimer-carre pgrid (aref grid i j) i j)
-		      (print "4")))))
-    (print pgrid))
+		      (supprimer-carre pgrid (aref grid i j) i j))))))
 
 
   (defun main-standalone ()
