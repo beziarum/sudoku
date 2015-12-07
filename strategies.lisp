@@ -1,78 +1,7 @@
 (load "affichage")
+(load "class.lisp")
 
 ;;; 1ere strategie (stupide)
-
-;; taille initial des grille de jeux
-(defparameter +SIZE+ 9)
-(defparameter +AREA+ (* +SIZE+ +SIZE+))
-(defparameter +CARRE-SIZE+ 3)
-
-;;grille initial du jeux
-
-(defparameter +grid+ 
-  (make-array '(9 9) :initial-contents
-	      '((1 0 0 0 0 4 0 0 5)
-		(0 0 0 9 5 0 0 8 0)
-		(0 0 0 0 0 3 0 9 0)
-		(0 0 5 0 0 2 0 0 4)
-		(0 0 1 0 6 0 7 0 0)
-		(0 0 0 3 0 0 2 0 0)
-		(0 6 0 5 0 0 0 0 0)
-		(0 8 0 0 1 6 0 0 0)
-		(5 0 0 2 0 0 0 0 7))))
-		
-		
-
-
-(defun test-colonne(grid c valeur)
-  (loop for i below +size+ never (eq(aref grid i c)valeur)
-       finally (return T)))
-
-;;test si la valeur est deja presente dans la ligne
-
-(defun test-ligne(grid l valeur)
-  (loop for i below +size+ never (eq (aref grid l i) valeur)
-      finally (return T)))
-
-;;test si la valeur est deja presente dans le carré
-
-(defun test-carre(grid c l valeur)
-  (let ((x (* (floor (/ l +CARRE-SIZE+)) +CARRE-SIZE+))
-       (y (* (floor (/ c +CARRE-SIZE+)) +CARRE-SIZE+)))
-    (loop for i from x to (-(+ x +CARRE-SIZE+)1) 
-       always (loop for j from y to (-(+ y +CARRE-SIZE+)1) never (eq(aref grid i j)valeur)
-       finally(return T)))))
-
-
-
-(defun test-valeur(grid c l valeur)
-  (if (and (test-ligne grid l valeur)
-	   (test-colonne grid c valeur)
-	   (test-carre grid c l valeur)
-	   (eq(aref grid l c) 0))
-      T
-      NIL))
-
-(defun set-valeur(grid c l valeur)
-  (if (test-valeur grid c l valeur)
-      (setf(aref grid l c)valeur)
-      (print "Impossible d'atribuer cette valeur a cette case")))
-
-
-(defun grid-copy (grid)
-  (let ((g (make-array '(9 9) :element-type (array-element-type grid))))
-    (loop for i below 9
-       do (loop for j below 9
-	     do (setf (aref g i j) (aref grid i j))))
-    g))
-
-
-(defun delete-valeur(grid grid-copy c l)
-  (if (and (eq (aref grid-copy l c) 0) (not (eq (aref grid l c) 0)))
-      (setf (aref grid l c) 0)
-      (print "Impossible de suprimer cette valeur")))
-	  
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
 (defun number-of-zeroes (grid)
@@ -112,21 +41,32 @@
     (incf place)
     (print place)
     (multiple-value-bind (j i) (position-zero grid place) ; i = colonne
-      (let* ((l (possibility-list grid i j))             ; l = liste des possibilités
-	     (rand (nth (random (length l)) l)))	 ; élément aléatoire parmi la liste de possibilité
-	(print l)
+      (let* ((l (possibility-list grid i j)))             ; l = liste des possibilités
 	(if (eq l NIL)
 	    NIL
-	    (set-valeur grid i j rand))))))
+	    (set-valeur grid i j (nth (random (length l)) l))))))) ; element aleatoire parmi l
   
 
 
-(defun test-position ()
-  (loop for i below (number-of-zeroes +grid+)
-	do (print (position-zero +grid+ (+ i 1)))))
+;(defun test-position ()
+ ; (loop for i below (number-of-zeroes +grid+)
+;	do (print (position-zero +grid+ (+ i 1)))))
+    
+(defun remain-list (l)
+  (let ((l2 '()))
+    (loop for i below 9
+	  do (if (not (member (+ 1 i) l))
+		 (push (+ 1 i) l2)))
+    l2))
+    
+(defun is-not-possible (grid colonne ligne)
+    (let ((l '()))
+    (loop for i below 9
+       do (if (not (test-valeur grid colonne ligne (+ 1 i)))
+	      (push (+ 1 i) l)))
+    l))
     
 
-    
-    
-    
+      
+      
   
