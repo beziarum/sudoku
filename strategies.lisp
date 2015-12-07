@@ -1,3 +1,5 @@
+(load "affichage")
+
 ;;; 1ere strategie (stupide)
 
 ;; taille initial des grille de jeux
@@ -14,7 +16,7 @@
 		(0 0 0 0 0 3 0 9 0)
 		(0 0 5 0 0 2 0 0 4)
 		(0 0 1 0 6 0 7 0 0)
-		(7 0 0 3 0 0 2 0 0)
+		(0 0 0 3 0 0 2 0 0)
 		(0 6 0 5 0 0 0 0 0)
 		(0 8 0 0 1 6 0 0 0)
 		(5 0 0 2 0 0 0 0 7))))
@@ -56,6 +58,7 @@
       (setf(aref grid l c)valeur)
       (print "Impossible d'atribuer cette valeur a cette case")))
 
+
 (defun grid-copy (grid)
   (let ((g (make-array '(9 9) :element-type (array-element-type grid))))
     (loop for i below 9
@@ -68,9 +71,7 @@
   (if (and (eq (aref grid-copy l c) 0) (not (eq (aref grid l c) 0)))
       (setf (aref grid l c) 0)
       (print "Impossible de suprimer cette valeur")))
-
-
-		  
+	  
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
@@ -88,37 +89,43 @@
 	(k 0)
 	(l 0))
     (loop for i below 9
-       do (loop for j below 9
-	     do (if (eq (aref grid i j) 0)
+       do (loop for j below 9 never (eq tmp 0)
+	     do (if (eq (aref grid i j) 0) 
 		    (decf tmp))
 	     do (when (eq tmp 0)
 		  (setf k i)
 		  (setf l j)
-		  (return)
-		  )))	 
+		  )))
     (values k l)))
 	      
 		   
 (defun possibility-list (grid colonne ligne)
   (let ((l '()))
     (loop for i below 9
-       do (if (test-valeur grid colonne ligne i)
-	      (push i l)))))
+       do (if (test-valeur grid colonne ligne (+ 1 i))
+	      (push (+ 1 i) l)))
+    l))
 
 
 (defun random-strat (grid)
-  (let ((place (random (number-of-zeroes +grid+))))
-    (multiple-value-bind (i j) (position-zero +grid+ place)
-      (loop for k below 9
-	 do (if (member k (possibility-list +grid+ i j))
-		(set-valeur +grid+ i j k))))))
+  (let ((place (random (number-of-zeroes grid))))
+    (incf place)
+    (print place)
+    (multiple-value-bind (j i) (position-zero grid place) ; i = colonne
+      (let* ((l (possibility-list grid i j))             ; l = liste des possibilités
+	     (rand (nth (random (length l)) l)))	 ; élément aléatoire parmi la liste de possibilité
+	(print l)
+	(if (eq l NIL)
+	    NIL
+	    (set-valeur grid i j rand))))))
+  
 
+
+(defun test-position ()
+  (loop for i below (number-of-zeroes +grid+)
+	do (print (position-zero +grid+ (+ i 1)))))
     
-    
-    
-    
- ; (print (nth (random (length *list*)) *list*))  
-    
+
     
     
     
