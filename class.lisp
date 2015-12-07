@@ -37,22 +37,6 @@
 
 ;;effectue une copie d'une grille de jeux
 
-(defun initialise-tab-strat (grid)
-  (let ((tableau (make-array '(9 9):initial-element '(1 2 3 4 5 6 7 8 9))))
-    (print tableau)
-    (loop for i below 9
-	  do (loop for j below 9
-		   do (if (/= (aref grid i j) 0)
-			  (progn
-			    (print "1")
-			    (supprimer-colone tableau (aref grid i j) j)
-			    (print "2")
-			    (supprimer-ligne tableau (aref grid i j) i)
-			    (print "3")
-			    (supprimer-carre tableau (aref grid i j) i j)
-			    (print "4")))))
-    tableau))
-
 
 (defun grid-copy (grid)
   (let ((g (make-array '(9 9))))
