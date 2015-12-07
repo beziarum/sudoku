@@ -43,9 +43,9 @@
 	  do (loop for j below 9
 		   do (if (/= (aref grid i j) 0)
 			  (progn
-			    (supprimer-colone tableau j (aref grid i j))
-			    (supprimer-ligne tableau i  (aref grid i f))
-			    (supprimer-carre tableau i j (aref grid i j))))))
+			    (supprimer-colone tableau (aref grid i j) j)
+			    (supprimer-ligne tableau (aref grid i f) i)
+			    (supprimer-carre tableau (aref grid i j) i j)))))
     tableau))
 
 
@@ -71,8 +71,8 @@
 ;;test si la valeur est deja presente dans le carré
 
 (defun test-carre(grid c l valeur)
-  (let ((x (* (floor (/ l +CARRE-SIZE+)) +CARRE-SIZE+))
-       (y (* (floor (/ c +CARRE-SIZE+)) +CARRE-SIZE+)))
+  (let ((x (- l (mod l +CARRE-SIZE+)))
+       (y (- c (mod c +CARRE-SIZE+))))
     (loop for i from x to (-(+ x +CARRE-SIZE+)1) 
        always (loop for j from y to (-(+ y +CARRE-SIZE+)1) never (eq(aref grid i j)valeur)
        finally(return T)))))
@@ -146,3 +146,5 @@
 (defun sudoku(grid)
   (let ((g (grid-copy grid )))
     (sudoku-main grid g)))
+
+
