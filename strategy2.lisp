@@ -26,8 +26,7 @@
 		      (supprimer-colone pgrid (aref grid i j) j)
 		      (supprimer-ligne pgrid (aref grid i j) i)
 		      (supprimer-carre pgrid (aref grid i j) i j)
-		      (setf (aref pgrid i j) nil)))))
-    (print pgrid))
+		      (setf (aref pgrid i j) nil))))))
 
 
   (defun main-standalone ()
@@ -41,9 +40,6 @@
 		      (progn (setf ret (list j
 					     i
 					    (car (aref pgrid i j))))
-			     (print i)
-			     (print j)
-			     (print (aref pgrid i j))
 			     (supprimer-colone pgrid ret j)
 			     (supprimer-ligne pgrid ret i)
 			     (supprimer-carre pgrid ret i j)
@@ -56,9 +52,7 @@
   (labels ((intern-test-strat ()
 	     (multiple-value-bind (i j v) (funcall main)
 	       (if (not (null v))
-		   (progn (print (aref grid j i))
-			  (setf (aref grid j i) v)
-			  (print (aref grid j i))
+		   (progn (setf (aref grid j i) v)
 			  (afficher-sudoku grid)
 			  (intern-test-strat))))))
     (intern-test-strat)))
