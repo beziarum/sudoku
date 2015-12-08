@@ -33,6 +33,17 @@
     (if (null (cdr possible))
 	(car possible)
 	nil)))
+(defun inclusive-carre (grid i j)
+  (let ((possible (aref grid i j)))
+    (loop for x below 9
+       if (/= i x)
+       do (loop for y below 9
+	     if (/= j y)
+	     do (setf possible (set-difference possible
+					       (aref grid x y)))))
+    (if (null (cdr possible))
+	possible
+	nil)))
 
 (defun exclusive-strat (grid)
     (let ((ret nil))
@@ -57,9 +68,12 @@
 	 do (loop for j below 9 always (null ret)
 	       do (progn (setf ret
 			       (multiple-value-list (inclusive-colone grid i j))))
-			 (if (null ret)
-			     (setf ret
-				   (multiple-value-list (inclusive-ligne grid i j))))))
+		 (if (null ret)
+		     (setf ret
+			   (multiple-value-list (inclusive-ligne grid i j))))
+		 (if (null ret)
+		     (setf ret
+			   (multiple-value-list (inclusive-carre grid i j))))))
       (values-list ret)))
 
 (let ((pgrid nil)
