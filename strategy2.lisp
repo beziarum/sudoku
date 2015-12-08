@@ -17,6 +17,7 @@
 
 (defun inclusive-colone (grid i j)
   (let ((possible (aref grid i j)))
+    ;(print 'flood3)
     (loop for y below 9
        do (if (/= j y)
 	      (setf possible (set-difference possible (aref grid i y)))))
@@ -27,14 +28,17 @@
 
 (defun inclusive-ligne (grid i j)
   (let ((possible (aref grid i j)))
+    ;(print 'flood2)
     (loop for x below 9
        do (if (/= x i)
 	      (setf possible (set-difference possible (aref grid x j)))))
     (if (null (cdr possible))
 	(car possible)
 	nil)))
+
 (defun inclusive-carre (grid i j)
   (let ((possible (aref grid i j)))
+    ;(print 'flood)
     (loop for x below 9
        if (/= i x)
        do (loop for y below 9
@@ -42,7 +46,7 @@
 	     do (setf possible (set-difference possible
 					       (aref grid x y)))))
     (if (null (cdr possible))
-	possible
+	(car possible)
 	nil)))
 
 (defun exclusive-strat (grid)
@@ -55,26 +59,39 @@
 			   (not (null (car (aref grid i j)))))
 		      (progn (setf ret (list j
 					     i
-					    (car (aref grid i j))))
-			     (supprimer-colone grid ret j)
-			     (supprimer-ligne grid ret i)
-			     (supprimer-carre grid ret i j)
+					     (car (aref grid i j))))
+			     (print 'teiurs)
+			     (supprimer-colone grid (caddr ret) j)
+			     (supprimer-ligne grid (caddr ret) i)
+			     (supprimer-carre grid (caddr ret) i j)
 			     (setf (aref grid i j) nil)))))
       (values-list ret)))
 
 (defun inclusive-strat (grid)
-    (let ((ret nil))
-      (loop for i below 9 always (null ret)
-	 do (loop for j below 9 always (null ret)
-	       do (progn (setf ret
-			       (multiple-value-list (inclusive-colone grid i j))))
-		 (if (null ret)
-		     (setf ret
-			   (multiple-value-list (inclusive-ligne grid i j))))
-		 (if (null ret)
-		     (setf ret
-			   (multiple-value-list (inclusive-carre grid i j))))))
-      (values-list ret)))
+    (let ((ret '(0 0 nil)))
+      (loop for i below 9 always (null (caddr ret))
+	 do (loop for j below 9 always (null (caddr ret))
+	       do (progn (setf ret (list j
+					 i
+					 (inclusive-colone grid i j)))
+			 ;(print ret)
+			 (if (null (caddr ret))
+			     (setf ret (list j
+					     i
+					     (inclusive-ligne grid i j))))
+			 ;(print ret)
+			 (if (null (caddr ret))
+			     (setf ret (list j
+					     i
+					     (inclusive-carre grid i j))))
+					;(print ret)
+			 )))
+      (if (null (caddr ret))
+	  nil
+	  (progn (supprimer-colone grid (caddr ret) (car ret))
+		 (supprimer-ligne grid (caddr ret) (cadr ret))
+		 (supprimer-carre grid (caddr ret) (cadr ret) (car ret))
+		 (values-list ret)))))
 
 (let ((pgrid nil)
       (travail-grid nil))
@@ -93,10 +110,11 @@
   (defun test ()
     (inclusive-strat pgrid))
   (defun main-standalone ()
+    (print pgrid)
     (multiple-value-bind (i j v) (exclusive-strat pgrid)
       (if (not (null v))
-	  (progn (print pgrid) (values i j v))
-	  (inclusive-strat pgrid)))))
+	  (progn (print v) (values i j v))
+	  (progn (print 'caca) (inclusive-strat pgrid))))))
 
 (defun test-strat (init main grid)
   (funcall init grid)
