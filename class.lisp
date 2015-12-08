@@ -1,6 +1,7 @@
 (load "affichage")
 (load "lecture")
-
+(load "strategies")
+(load "strategy2")
 
 ;; taille initial des grille de jeux
 (defparameter +SIZE+ 9)
@@ -33,15 +34,27 @@
 		(0 8 0 0 1 6 0 0 0)
 		(5 0 0 2 0 0 0 0 7))))
 
+(defparameter +grid-facile+
+  (make-array '(9 9) :initial-contents
+	      '((9 2 0 0 0 0 0 3 8)
+		(0 0 0 5 0 0 7 2 0)
+		(0 0 1 2 0 0 0 0 6)
+		(5 9 0 6 0 0 3 0 0)
+		(1 3 0 9 0 5 0 6 4)
+		(0 0 7 0 0 4 0 9 2)
+		(7 0 0 0 0 6 2 0 0)
+		(0 4 8 0 0 9 0 0 0)
+		(2 5 0 0 0 0 0 8 7))))
+
 
 ;;effectue une copie d'une grille de jeux
+
 
 (defun grid-copy (grid)
   (let ((g (make-array '(9 9))))
     (loop for i below 9
        do (loop for j below 9
-	     do (if (not(zerop(aref grid i j)))
-		    (setf(aref g i j)1))))
+	     do (setf (aref g i j)(aref grid i j))))
     g))
 
 ;;test si la valeur est deja presente dans la colone
@@ -59,8 +72,8 @@
 ;;test si la valeur est deja presente dans le carré
 
 (defun test-carre(grid c l valeur)
-  (let ((x (* (floor (/ l +CARRE-SIZE+)) +CARRE-SIZE+))
-       (y (* (floor (/ c +CARRE-SIZE+)) +CARRE-SIZE+)))
+  (let ((x (- l (mod l +CARRE-SIZE+)))
+       (y (- c (mod c +CARRE-SIZE+))))
     (loop for i from x to (-(+ x +CARRE-SIZE+)1) 
        always (loop for j from y to (-(+ y +CARRE-SIZE+)1) never (eq(aref grid i j)valeur)
        finally(return T)))))
@@ -103,12 +116,12 @@
 	(if (test-delete-valeur grid grid-copy c l)
 	    (delete-valeur grid c l)
 	    (progn
-	      (princ "Impossible de supprimer cette valeur")
+	      (princ "Impossible de supprimer cette valeur ")
 	      (play grid grid-copy)))
 	(if (test-valeur grid c l valeur)
 	    (set-valeur grid c l valeur)
 	    (progn
-	      (princ "Impossible d'atribuer cette valeur a cette case")
+	      (princ "Impossible d'atribuer cette valeur a cette case ")
 	      (play grid grid-copy))))))
 
 
@@ -117,11 +130,12 @@
   (let ((c 0))
   (loop for i below +SIZE+
        do (loop for j below +SIZE+
-	       do (if (eq(aref grid i j)0)
+	       do (if (not(eq(aref grid i j)0))
 		      (incf c))))
   (if (eq c (* +SIZE+ +SIZE+))
       T
       NIL)))
+
 
 (defun sudoku-main (grid g)
   (afficher-sudoku grid)
@@ -133,3 +147,5 @@
 (defun sudoku(grid)
   (let ((g (grid-copy grid )))
     (sudoku-main grid g)))
+
+
