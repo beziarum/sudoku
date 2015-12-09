@@ -107,7 +107,8 @@
        do (loop for y1 from j below (+ 3 j)
 	     do (loop for x2 from x1 below (+ 3 i)
 		   do (loop for y2 from (if (= x1 x2) (+ 1 y1) 0) below (+ 3 j)
-			 if (equal (aref grid x1 y1) (aref grid x2 y2))
+			 if (and (equal (aref grid x1 y1) (aref grid x2 y2))
+				 (= (length (aref grid x1 y1)) 2))
 			 do (loop for x3 from i below (+ 3 i)
 			       do (loop for y3 from i below (+ 3 j)
 				     if (and (or (/= x1 x2 x3) (/= y1 y2 y3))
@@ -121,14 +122,18 @@
 
 (defun simplifier-sudoku (grid)
   ;; nil)
+  (print 'début)
+  (print grid)
   (let ((simp nil))
     (loop for n below 9
-       do (progn (setf simp (or (simplifier-colonne grid n) simp)) ))
-	;;	 (setf simp (or (simplifier-colone grid n) simp)) ))
-  		 ;; (if (= (mod n 3) 0)
-  		 ;;     (loop for m below 9 by 3
-  		 ;;	do (setf simp (or (simplifier-carre grid n m) simp))))))
-   simp))
+       do (progn (setf simp (or (simplifier-colonne grid n) simp)) 
+		 (setf simp (or (simplifier-ligne grid n) simp))
+  		 (if (= (mod n 3) 0)
+  		     (loop for m below 9 by 3
+  		 	do (setf simp (or (simplifier-carre grid n m) simp))))))
+    (print 'fin)
+    (print grid)
+    simp))
 	    
 ;; (defun pifo-strat (grid)
 ;;   (let ((ret nil))
@@ -194,4 +199,5 @@
 		   (progn (setf (aref grid j i) v)
 			  (afficher-sudoku grid)
 			  (intern-test-strat))))))
-    (intern-test-strat)))
+    (intern-test-strat)
+    (afficher-sudoku grid)))
