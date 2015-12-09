@@ -1,5 +1,25 @@
 ;(in-package :sudoku)
 
+
+(defun afficher-case (v)
+  (format t " ~D " v))
+
+(defun afficher-separation-ligne ()
+  (format t (make-string 34 :initial-element #\*))
+  (format t "~%"))
+
+(defun afficher-ligne (tab i)
+  (afficher-case (1+ i))
+  (loop
+     for j below 9
+     if (= (mod j 3) 0)
+     do (progn (format t "|")
+	       (afficher-case (aref tab i j)))
+     else
+     do (afficher-case (aref tab i j)))
+  (format t "|~%"))
+
+
 (defun afficher-sudoku (tab)
   (afficher-case " ")
   (loop
@@ -19,20 +39,3 @@
   (afficher-separation-ligne))
 
 
-(defun afficher-case (v)
-  (format t " ~D " v))
-
-(defun afficher-separation-ligne ()
-  (format t (make-string 34 :initial-element #\*))
-  (format t "~%"))
-
-(defun afficher-ligne (tab i)
-  (afficher-case (1+ i))
-  (loop
-     for j below 9
-     if (= (mod j 3) 0)
-     do (progn (format t "|")
-	       (afficher-case (aref tab i j)))
-     else
-     do (afficher-case (aref tab i j)))
-  (format t "|~%"))
