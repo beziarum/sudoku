@@ -66,7 +66,9 @@
 			     (supprimer-carre grid (caddr ret) i j)
 			     (setf (aref grid i j) nil)))))
       (values-list ret)))
-
+;; (defun pifo-strat (grid)
+;;   (let ((ret nil))
+;;     (loop for i below 9 aways (null
 (defun inclusive-strat (grid)
     (let ((ret '(0 0 nil)))
       (loop for i below 9 always (null (caddr ret))
@@ -91,6 +93,7 @@
 	  (progn (supprimer-colone grid (caddr ret) (car ret))
 		 (supprimer-ligne grid (caddr ret) (cadr ret))
 		 (supprimer-carre grid (caddr ret) (cadr ret) (car ret))
+		 (setf (aref grid (cadr ret) (car ret)) nil)
 		 (values-list ret)))))
 
 (let ((pgrid nil)
