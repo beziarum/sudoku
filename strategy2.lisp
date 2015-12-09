@@ -1,4 +1,4 @@
-
+(defparameter +carre-size+ 3)
 
 (defun supprimer-colone (grid e j)
   (loop for i below 9
@@ -20,21 +20,21 @@
     ;(print 'flood3)
     (loop for y below 9
        do (if (/= j y)
-	      (setf possible (set-difference possible (aref grid i y)))))
+  	      (setf possible (set-difference possible (aref grid i y)))))
     ;(print possible)
     (if (null (cdr possible))
-	(car possible)
-	nil)))
+  	(car possible)
+  	nil)))
 
 (defun inclusive-ligne (grid i j)
-  (let ((possible (aref grid i j)))
+(let ((possible (aref grid i j)))
     ;(print 'flood2)
     (loop for x below 9
        do (if (/= x i)
-	      (setf possible (set-difference possible (aref grid x j)))))
+  	      (setf possible (set-difference possible (aref grid x j)))))
     (if (null (cdr possible))
-	(car possible)
-	nil)))
+  	(car possible)
+  	nil)))
 
 (defun inclusive-carre (grid i j)
   (let ((possible (aref grid i j)))
@@ -42,12 +42,12 @@
     (loop for x below 9
        if (/= i x)
        do (loop for y below 9
-	     if (/= j y)
-	     do (setf possible (set-difference possible
-					       (aref grid x y)))))
+  	     if (/= j y)
+  	     do (setf possible (set-difference possible
+  					       (aref grid x y)))))
     (if (null (cdr possible))
-	(car possible)
-	nil)))
+  	(car possible)
+  	nil)))
 
 (defun exclusive-strat (grid)
     (let ((ret nil))
@@ -57,10 +57,10 @@
 	       for j below 9 always (null ret)
 	       do (if (and (null (cdr (aref grid i j)))
 			   (not (null (car (aref grid i j)))))
-		      (progn (setf ret (list j
-					     i
+		      (progn (setf ret (list i
+					     j
 					     (car (aref grid i j))))
-			     (print 'teiurs)
+			     ;(print 'teiurs)
 			     (supprimer-colone grid (caddr ret) j)
 			     (supprimer-ligne grid (caddr ret) i)
 			     (supprimer-carre grid (caddr ret) i j)
@@ -70,35 +70,38 @@
 ;;   (let ((ret nil))
 ;;     (loop for i below 9 aways (null
 (defun inclusive-strat (grid)
+  ;(print 'strat_inclusive)
     (let ((ret '(0 0 nil)))
       (loop for i below 9 always (null (caddr ret))
 	 do (loop for j below 9 always (null (caddr ret))
-	       do (progn (setf ret (list j
-					 i
+	       do (progn (setf ret (list i
+					 j
 					 (inclusive-colone grid i j)))
 			 ;(print ret)
 			 (if (null (caddr ret))
-			     (setf ret (list j
-					     i
+			     
+			       (setf ret (list i
+					     j
 					     (inclusive-ligne grid i j))))
 			 ;(print ret)
 			 (if (null (caddr ret))
-			     (setf ret (list j
-					     i
+				   
+			     (setf ret (list i
+					     j
 					     (inclusive-carre grid i j))))
 					;(print ret)
 			 )))
       (if (null (caddr ret))
-	  nil
-	  (progn (supprimer-colone grid (caddr ret) (car ret))
-		 (supprimer-ligne grid (caddr ret) (cadr ret))
-		 (supprimer-carre grid (caddr ret) (cadr ret) (car ret))
-		 (setf (aref grid (cadr ret) (car ret)) nil)
+	  (progn (print '(ça explique pas mal de choses)) nil)
+	  (progn (supprimer-colone grid (caddr ret) (cadr ret))
+		 (supprimer-ligne grid (caddr ret) (car ret))
+		 (supprimer-carre grid (caddr ret) (car ret) (cadr ret))
+		 (setf (aref grid (car ret) (cadr ret)) nil)
 		 (values-list ret)))))
 
 (let ((pgrid nil)
       (travail-grid nil))
-  (defun initialise-tab-strat (grid)
+  (defun init-standalone (grid)
     (setf travail-grid grid)
     (setf pgrid (make-array '(9 9):initial-element '(1 2 3 4 5 6 7 8 9)))
     (loop for i below 9
@@ -111,20 +114,22 @@
 		      (setf (aref pgrid i j) nil))))))
 
   (defun test ()
-    (inclusive-strat pgrid))
+    (print pgrid))
   (defun main-standalone ()
-    (print pgrid)
+    ;(print pgrid)
     (multiple-value-bind (i j v) (exclusive-strat pgrid)
       (if (not (null v))
-	  (progn (print v) (values i j v))
-	  (progn (print 'caca) (inclusive-strat pgrid))))))
+	  (progn (values i j v))
+	  (progn (inclusive-strat pgrid))))))
 
 (defun test-strat (init main grid)
   (funcall init grid)
   (labels ((intern-test-strat ()
 	     (multiple-value-bind (i j v) (time (funcall main))
 	       (if (not (null v))
-		   (progn (setf (aref grid j i) v)
+		   (progn (setf (aref grid i j) v)
 			  (afficher-sudoku grid)
 			  (intern-test-strat))))))
-    (intern-test-strat)))
+    (intern-test-strat)
+    (test)))
+;    (afficher-sudoku grid)))
