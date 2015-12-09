@@ -3,12 +3,12 @@
 (load "strategies")
 (load "strategy2")
 (load "constante")
-(defparameter +SIZE+ 9)
+
 ;;Effectue une copie d'une grille de jeux
 
 
 (defun grid-copy (grid)
-  (let ((g (make-array '(+SIZE+ +SIZE+))))
+  (let ((g (make-array '(9 9))))
     (loop for i below +SIZE+
 	  do (loop for j below +SIZE+
 		   do (setf (aref g i j)(aref grid i j))))
@@ -78,7 +78,8 @@
 	     (read))) 
 	(l  (read))
 	(valeur  (read)))
-    (setf c (transformation c)) ;transforme la lettre de la colone en chiffre (voir fichier lecture)
+    (setf c (transformation c)) ;transforme la lettre de la colone en chiffre 
+					;(voir fichier lecture)
     (decf l)
     (if (zerop valeur)
 	(if (test-delete-valeur grid grid-copy c l)
@@ -102,7 +103,7 @@
 	  do (loop for j below +SIZE+
 		   do (if (not(eq(aref grid i j)0))
 			  (incf c))))
-    (if (eq c +AREA+))
+    (if (eq c +AREA+)
 	T
 	NIL)))
 
@@ -120,5 +121,7 @@
 (defun sudoku(grid)
   (let ((g (grid-copy grid )))
     (sudoku-main grid g)))
+
+
 
 
