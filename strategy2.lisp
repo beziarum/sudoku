@@ -185,7 +185,7 @@
     (print pgrid)
     (let ((l (multiple-value-list (exclusive-strat pgrid))))
       (if (null (car l))
-	  (setf l (exclusive-strat pgrid)))
+	  (setf l (multiple-value-list (inclusive-strat pgrid))))
       (if (and (null (car l))
 	       (simplifier-sudoku pgrid))
 	  (main-standalone)
