@@ -1,4 +1,4 @@
-
+(defconstant +carre-size+ 3)
 
 (defun supprimer-colone (grid e j)
   (loop for i below 9
@@ -57,8 +57,8 @@
 	       for j below 9 always (null ret)
 	       do (if (and (null (cdr (aref grid i j)))
 			   (not (null (car (aref grid i j)))))
-		      (progn (setf ret (list j
-					     i
+		      (progn (setf ret (list i
+					     j
 					     (car (aref grid i j))))
 			     (print 'teiurs)
 			     (supprimer-colone grid (caddr ret) j)
