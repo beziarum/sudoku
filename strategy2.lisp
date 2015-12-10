@@ -17,18 +17,15 @@
 
 (defun inclusive-colone (grid i j)
   (let ((possible (aref grid i j)))
-    ;(print 'flood3)
     (loop for y below 9
        do (if (/= j y)
 	      (setf possible (set-difference possible (aref grid i y)))))
-    ;(print possible)
     (if (null (cdr possible))
 	(car possible)
 	nil)))
 
 (defun inclusive-ligne (grid i j)
   (let ((possible (aref grid i j)))
-    ;(print 'flood2)
     (loop for x below 9
        do (if (/= x i)
 	      (setf possible (set-difference possible (aref grid x j)))))
@@ -38,7 +35,6 @@
 
 (defun inclusive-carre (grid i j)
   (let ((possible (aref grid i j)))
-    ;(print 'flood)
     (loop for x below 9
        if (/= i x)
        do (loop for y below 9
@@ -60,7 +56,6 @@
 		      (progn (setf ret (list i
 					     j
 					     (car (aref grid i j))))
-			     (print 'teiurs)
 			     (supprimer-colone grid (caddr ret) j)
 			     (supprimer-ligne grid (caddr ret) i)
 			     (supprimer-carre grid (caddr ret) i j)
@@ -130,10 +125,8 @@
   		     (loop for m below 9 by 3
   		 	do (setf simp (or (simplifier-carre grid n m) simp))))))
     simp))
-	    
-;; (defun pifo-strat (grid)
-;;   (let ((ret nil))
-;;     (loop for i below 9 aways (null
+
+
 (defun inclusive-strat (grid)
     (let ((ret '(0 0 nil)))
       (loop for i below 9 always (null (caddr ret))
@@ -141,22 +134,18 @@
 	       do (progn (setf ret (list i
 					 j
 					 (inclusive-colone grid i j)))
-			 ;(print ret)
 			 (if (null (caddr ret))
 			     
 			       (setf ret (list i
 					     j
 					     (inclusive-ligne grid i j))))
-			 ;(print ret)
 			 (if (null (caddr ret))
 				   
 			     (setf ret (list i
 					     j
-					     (inclusive-carre grid i j))))
-					;(print ret)
-			 )))
+					     (inclusive-carre grid i j)))))))
       (if (null (caddr ret))
-	  (progn (print '(ça explique pas mal de choses)) nil)
+	  nil
 	  (progn (supprimer-colone grid (caddr ret) (cadr ret))
 		 (supprimer-ligne grid (caddr ret) (car ret))
 		 (supprimer-carre grid (caddr ret) (car ret) (cadr ret))
