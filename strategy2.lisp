@@ -138,32 +138,34 @@
     (let ((ret '(0 0 nil)))
       (loop for i below 9 always (null (caddr ret))
 	 do (loop for j below 9 always (null (caddr ret))
-	       do (progn (setf ret (list j
-					 i
+	       do (progn (setf ret (list i
+					 j
 					 (inclusive-colone grid i j)))
 			 ;(print ret)
 			 (if (null (caddr ret))
-			     (setf ret (list j
-					     i
+			     
+			       (setf ret (list i
+					     j
 					     (inclusive-ligne grid i j))))
 			 ;(print ret)
 			 (if (null (caddr ret))
-			     (setf ret (list j
-					     i
+				   
+			     (setf ret (list i
+					     j
 					     (inclusive-carre grid i j))))
 					;(print ret)
 			 )))
       (if (null (caddr ret))
-	  nil
-	  (progn (supprimer-colone grid (caddr ret) (car ret))
-		 (supprimer-ligne grid (caddr ret) (cadr ret))
-		 (supprimer-carre grid (caddr ret) (cadr ret) (car ret))
-		 (setf (aref grid (cadr ret) (car ret)) nil)
+	  (progn (print '(ça explique pas mal de choses)) nil)
+	  (progn (supprimer-colone grid (caddr ret) (cadr ret))
+		 (supprimer-ligne grid (caddr ret) (car ret))
+		 (supprimer-carre grid (caddr ret) (car ret) (cadr ret))
+		 (setf (aref grid (car ret) (cadr ret)) nil)
 		 (values-list ret)))))
 
 (let ((pgrid nil)
       (travail-grid nil))
-  (defun initialise-tab-strat (grid)
+  (defun init-standalone (grid)
     (setf travail-grid grid)
     (setf pgrid (make-array '(9 9):initial-element '(1 2 3 4 5 6 7 8 9)))
     (loop for i below 9
