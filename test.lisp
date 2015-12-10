@@ -27,8 +27,17 @@
 				   (setf (aref g i j)(remove v (aref g i j)))))))
     (equalp g vrais-grid)))
 	
-
-
+;;vérifie si une stratégie marche en lui donnant une grille particulière
+(defun test-strat (init main grid)
+  (funcall init grid)
+  (labels ((intern-test-strat ()
+	     (multiple-value-bind (i j v) (time (funcall main))
+	       (if (not (null v))
+		   (progn (setf (aref grid j i) v)
+			  (afficher-sudoku grid)
+			  (intern-test-strat))))))
+    (intern-test-strat)
+    (afficher-sudoku grid)))
 
 (defun main-test()
   (if (and(test-copy-grid +grid-test+)
