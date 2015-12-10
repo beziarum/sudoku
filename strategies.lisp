@@ -106,6 +106,8 @@
 	      (push i l)))))
 
 
+;;;;;;;;;;;;;;warning a corriger tu met grid zn param mais tu l'utilise pas;;;;;;;;
+
 (defun random-strat (grid)
   (let ((place (random (number-of-zeroes +grid+))))
     (multiple-value-bind (i j) (position-zero +grid+ place)
