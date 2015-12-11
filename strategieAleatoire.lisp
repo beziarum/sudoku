@@ -16,6 +16,9 @@
 ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(load "utilitaire")
+(load "constante")
+
 ;; Fonction qui compte le nombre de cases vides dans un sudoku
 ;; complexité : O(n²)
 
