@@ -105,18 +105,18 @@
 	     (read))) 
 	(l  (read))
 	(valeur  (read)))
-    (setf c (transformation c)) ;transforme la lettre de la colone en chiffre 
-					;(voir fichier lecture)
-    (if(triplet-valide c l valeur);permet d'éviter les erreurs en cas de mauvaise saisie
+    (setf c (transformation c))           ;transforme la lettre de la colone en chiffre 
+					  ;(voir fichier lecture)
+    (if(triplet-valide c l valeur)        ;permet d'éviter les erreurs en cas de mauvaise saisie
        (progn
-	 (decf l); nous on vas de 0 a 8 pas de 1 a 9 (pour c la décrémentation se fait a la transformation
+	 (decf l)                         ; nous on vas de 0 a 8 pas de 1 a 9 (pour c la décrémentation se fait a la transformation
 	 (if (zerop valeur)
-	     (if (test-delete-valeur grid grid-copy c l); cas ou on cherche a supprimer une valeur
+	     (if (test-delete-valeur grid grid-copy c l)   ; cas ou on cherche a supprimer une valeur
 		 (delete-valeur grid c l)
 		 (progn
 		   (format t "Impossible de supprimer cette valeur~% ")
 		   (play grid grid-copy)))
-	     (if (test-valeur grid c l valeur);cas ou on cherche a jouer
+	     (if (test-valeur grid c l valeur)                ;cas ou on cherche a jouer
 		 (set-valeur grid c l valeur)
 		 (progn
 		   (format t"Impossible d'atribuer cette valeur a cette case ~% ")
@@ -153,8 +153,9 @@
 ;;fonction qui fait la copie de la grid et lance le main
 
 (defun sudoku(grid)
-  (let ((g (grid-copy grid )))
-    (sudoku-main grid g)))
+  (let ((g (grid-copy grid )); on fait deux copie la premiere est celle sur laquel on va jouer sa évite de modifier la grille principal
+	(g2 (grid-copy grid)));la deuxieme permet de garder une copie de la grille initial pour savoir ou étais les valeur de départ
+    (sudoku-main g g2)))
 
 
 
