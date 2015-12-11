@@ -157,6 +157,15 @@
 					       (setf simp t))))))))
     simp))
 
+;;Cette fonction essai de simplifier une grille de possibilité
+;;pour celà elle va simplifier chaque ligne, colone et carre.
+;;Elle renvoi T si une simplification a pu être faite, nil sinon.
+;;Pour celà elle utilise la technique des paires exclusives
+;;Si deux cases dans une même zone (c'est à dire une colonne, une
+;;ligne ou un carre) possèdent la même paire de valeur, alors
+;;toutes les autres cases de cette zone ne peuvent pas être de
+;;l'une de ces deux valeurs, on met alors à jours les listes
+;;de possibilités
 (defun simplifier-sudoku (grid)
   (let ((simp nil))
     (loop for n below 9
@@ -168,6 +177,13 @@
     simp))
 
 
+;;Cette fonction prend en parametre une grille de possibilités et
+;;essai d'y trouver un coup valide en utilisant la stratégie inclusive :
+;;si une valeur est présente dans une seule des listes de probabilités d'une
+;;même colone (ou grille, ou carre) alors on sait que cette valeur est situé
+;;à cet position. La fonction met alors à jour les listes de possibilité des
+;;cases situés sur la même ligne, colonne et carre, puis renvoi la valeur
+;;précédement trouvé ainsi que sa position.
 (defun inclusive-strat (grid)
     (let ((ret '(0 0 nil)))
       (loop for i below 9 always (null (caddr ret))
