@@ -1,3 +1,7 @@
+(load "constante")
+;(load "strategy2")
+(load "class")
+
 ;; test si grid-copy fonctionne
 
 (defun test-copy-grid(grid)
@@ -39,8 +43,22 @@
     (intern-test-strat)
     (afficher-sudoku grid)))
 
+
+;;test si init-standalone renvoit la bonne grille de possibilité de valeur de la grid passer en parametre
+;;cette fonction obtenant son résultat grace au fonction supprimer-colone supprimer-ligne supprimer-carre
+;; nous considérerons qu'elles fonctionnent également
+
+(defun test-init-standalone (grid-test vrais-grid)
+  (let ((pgrid (init-standalone grid-test)))
+    (if (equalp pgrid vrais-grid)
+	T
+	NIL)))
+
+
+
 (defun main-test()
   (if (and(test-copy-grid +grid-test+)
-	  (test-test-valeur +grid-test+ +possible-grid-test+))
+	  (test-test-valeur +grid-test+ +possible-grid-test+)
+	  (test-init-standalone +grid-test+ +possible-grid-test+))
       T
       NIL))

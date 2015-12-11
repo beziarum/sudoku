@@ -1,4 +1,4 @@
-(defconstant +carre-size+ 3)
+(defparameter +carre-size+ 3)
 
 (defun supprimer-colone (grid e j)
   (loop for i below 9
@@ -152,10 +152,8 @@
 		 (setf (aref grid (car ret) (cadr ret)) nil)
 		 (values-list ret)))))
 
-(let ((pgrid nil)
-      (travail-grid nil))
+(let ((pgrid nil))
   (defun init-standalone (grid)
-    (setf travail-grid grid)
     (setf pgrid (make-array '(9 9):initial-element '(1 2 3 4 5 6 7 8 9)))
     (loop for i below 9
        do (loop for j below 9
@@ -164,7 +162,8 @@
 		      (supprimer-colone pgrid (aref grid i j) j)
 		      (supprimer-ligne pgrid (aref grid i j) i)
 		      (supprimer-carre pgrid (aref grid i j) i j)
-		      (setf (aref pgrid i j) nil))))))
+		      (setf (aref pgrid i j) nil)))))
+    pgrid)
 
   (defun test ()
     (inclusive-strat pgrid))
