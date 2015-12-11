@@ -157,10 +157,6 @@
 					       (setf simp t))))))))
     simp))
 
-
-;;Cette fonction essai de simplifier une grille de possibilité
-;;pour celà elle va simplifier chaque ligne, colone et carre.
-;;Elle renvoi T si une simplification a pu être faite, nil sinon.
 (defun simplifier-sudoku (grid)
   (let ((simp nil))
     (loop for n below 9
@@ -172,13 +168,6 @@
     simp))
 
 
-;;Cette fonction prend en parametre une grille de possibilités et
-;;essai d'y trouver un coup valide en utilisant la stratégie inclusive :
-;;si une valeur est présente dans une seule des listes de probabilités d'une
-;;même colone (ou grille, ou carre) alors on sait que cette valeur est situé
-;;à cet position. La fonction met alors à jour les listes de possibilité des
-;;cases situés sur la même ligne, colonne et carre, puis renvoi la valeur
-;;précédement trouvé ainsi que sa position.
 (defun inclusive-strat (grid)
     (let ((ret '(0 0 nil)))
       (loop for i below 9 always (null (caddr ret))
@@ -208,6 +197,7 @@
 (let ((pgrid nil))
   ;;Initialise la grille de probabilité en suivant une grille donné en parametre
   (defun init-standalone (grid)
+    (setf travail-grid grid)
     (setf pgrid (make-array '(9 9):initial-element '(1 2 3 4 5 6 7 8 9)))
     (loop for i below 9
        do (loop for j below 9

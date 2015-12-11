@@ -1,127 +1,80 @@
-;;; 1ere strategie (stupide)
-
-;; taille initial des grille de jeux
-(defparameter +SIZE+ 9)
-(defparameter +AREA+ (* +SIZE+ +SIZE+))
-(defparameter +CARRE-SIZE+ 3)
-
-;;grille initial du jeux
-
-(defparameter +grid+ 
-  (make-array '(9 9) :initial-contents
-	      '((1 0 0 0 0 4 0 0 5)
-		(0 0 0 9 5 0 0 8 0)
-		(0 0 0 0 0 3 0 9 0)
-		(0 0 5 0 0 2 0 0 4)
-		(0 0 1 0 6 0 7 0 0)
-		(7 0 0 3 0 0 2 0 0)
-		(0 6 0 5 0 0 0 0 0)
-		(0 8 0 0 1 6 0 0 0)
-		(5 0 0 2 0 0 0 0 7))))
-		
-		
 
 
-(defun test-colonne(grid c valeur)
-  (loop for i below +size+ never (eq(aref grid i c)valeur)
-       finally (return T)))
-
-;;test si la valeur est deja presente dans la ligne
-
-(defun test-ligne(grid l valeur)
-  (loop for i below +size+ never (eq (aref grid l i) valeur)
-      finally (return T)))
-
-;;test si la valeur est deja presente dans le carré
-
-(defun test-carre(grid c l valeur)
-  (let ((x (* (floor (/ l +CARRE-SIZE+)) +CARRE-SIZE+))
-       (y (* (floor (/ c +CARRE-SIZE+)) +CARRE-SIZE+)))
-    (loop for i from x to (-(+ x +CARRE-SIZE+)1) 
-       always (loop for j from y to (-(+ y +CARRE-SIZE+)1) never (eq(aref grid i j)valeur)
-       finally(return T)))))
+;;; 1ere strategie (aléatoire)
+;;; la stratégie joue un coup aléatoire parmi les coups autorisés
 
 
-
-(defun test-valeur(grid c l valeur)
-  (if (and (test-ligne grid l valeur)
-	   (test-colonne grid c valeur)
-	   (test-carre grid c l valeur)
-	   (eq(aref grid l c) 0))
-      T
-      NIL))
-
-(defun set-valeur(grid c l valeur)
-  (if (test-valeur grid c l valeur)
-      (setf(aref grid l c)valeur)
-      (print "Impossible d'atribuer cette valeur a cette case")))
-
-(defun grid-copy (grid)
-  (let ((g (make-array '(9 9) :element-type (array-element-type grid))))
-    (loop for i below 9
-       do (loop for j below 9
-	     do (setf (aref g i j) (aref grid i j))))
-    g))
-
-
-(defun delete-valeur(grid grid-copy c l)
-  (if (and (eq (aref grid-copy l c) 0) (not (eq (aref grid l c) 0)))
-      (setf (aref grid l c) 0)
-      (print "Impossible de suprimer cette valeur")))
-
-
-		  
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
+;; Fonction qui compte le nombre de cases vides dans un sudoku
 
 (defun number-of-zeroes (grid)
   (let ((cpt 0))
-    (loop for i below 9
-       do (loop for j below 9
-	     do (if (eq (aref grid i j) 0)
+    (loop for i below +SIZE+
+       do (loop for j below +SIZE+
+	     do (if (eq (aref grid i j) 0)       ; si la case est égale à 0 (donc vide), on incrémente le compteur
 		    (incf cpt))))
     cpt))
 
 
-(defun position-zero (grid value)
-  (let ((tmp value)
-	(k 0)
+;; fonction qui renvoie la position du n-ième zero du sudoku
+
+(defun position-zero (grid n)
+  (assert (<= n (number-of-zeroes grid)))
+  (let ((tmp n)                                       ; n (donc tmp) représente le n-ième zéro dans la grille
+	(k 0)                                         ; k et l sont les indices à renvoyer
 	(l 0))
-    (loop for i below 9
-       do (loop for j below 9
-	     do (if (eq (aref grid i j) 0)
+    (loop for i below +SIZE+                         
+       do (loop for j below +SIZE+ never (eq tmp 0)   ; on parcourt la grille tant que tmp n'est pas égal à 0
+	     do (if (eq (aref grid i j) 0)            ; quand on rencontre un zéro, on decrémente tmp
 		    (decf tmp))
-	     do (when (eq tmp 0)
+	     do (when (eq tmp 0)                      ; on sauvergarde les indices
 		  (setf k i)
 		  (setf l j)
-		  (return)
-		  )))	 
+		  )))
     (values k l)))
-	      
-		   
+
+
+;; fonction qui renvoie une liste de probabilité selon une case
+
 (defun possibility-list (grid colonne ligne)
+  (assert (and (>= colonne 0) (< colonne +SIZE+)))
+  (assert (and (>= colonne 0) (< colonne +SIZE+)))
   (let ((l '()))
+    (loop for i below +SIZE+
+       do (if (test-valeur grid colonne ligne (+ 1 i))      ; si la valeur est possible
+	      (push (+ 1 i) l)))                            ; on la stock dans l
+    l))
+
+;; fonction qui détermine s'il existe un coup possible 
+
+(defun is-possible (grid)
+  (let ((bool NIL))
     (loop for i below 9
-       do (if (test-valeur grid colonne ligne i)
-	      (push i l)))))
+	  do (loop for j below 9
+		   do (if (not (equalp (possibility-list grid i j) '()))   ; si la liste de possibilité d'une case est non nulle
+			  (setf bool T))))                                 ; on passe le booléen à True
+    bool))
 
-
-;;;;;;;;;;;;;;warning a corriger tu met grid zn param mais tu l'utilise pas;;;;;;;;
+;; fonction qui effectue la stratégie sur la grille
 
 (defun random-strat (grid)
-  (let ((place (random (number-of-zeroes +grid+))))
-    (multiple-value-bind (i j) (position-zero +grid+ place)
-      (loop for k below 9
-	 do (if (member k (possibility-list +grid+ i j))
-		(set-valeur +grid+ i j k))))))
+  (if (is-possible grid)
+      (let ((place (random (number-of-zeroes grid))))                   ; place représente un zéro aléatoire
+	(incf place)                                                    ; on incrémente car il y a un décalage (on veut 0 < place <= number-of-zeroes)
+	(multiple-value-bind (j i) (position-zero grid place)           ; on récupère la position du zéro 
+	  (let* ((l (possibility-list grid i j)))             
+	    (if (eq l NIL)                                              
+		(random-strat grid)                                     ; si la liste de probabilité de la case est nulle, on rappelle la stratégie
+		(values i j (nth (random (length l)) l))))))            ; sinon on renvoie les coordonées de la case à modifier, et la valeur à lui assigner
+  (progn (print "plus de valeur possible") NIL)))     
 
-    
-    
-    
-    
- ; (print (nth (random (length *list*)) *list*))  
-    
-    
-    
-    
-  
+
+;; fonction qui teste la stratégie aléatoire
+
+(defun test-random-strat ()
+  (loop while (not (eq (random-strat +grid+) NIL))                      ; tant qu'il reste des possibilités
+	do (multiple-value-bind (i j k) (random-strat +grid+)
+	     (set-valeur +grid+ i j k)))                                ; on joue
+  (if (is-possible +grid+)                                              ; on vérifie qu'il ne reste effectivement pas de possibilité
+      NIL
+      T))
+	     

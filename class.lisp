@@ -3,6 +3,7 @@
 (load "strategies")
 (load "strategy2")
 (load "constante")
+(load "test")
 
 ;;Effectue une copie d'une grille de jeux
 
@@ -37,7 +38,7 @@
 		       finally(return T)))))
 
 
-;; vérifie si une valeur est permise par les regle du jeux
+;; vérifie si une valeur est permise par les regle du jeux dans la grid passé en parametre
 
 (defun test-valeur (grid c l valeur)
   (if (and (test-ligne grid l valeur)
@@ -69,7 +70,33 @@
   (setf(aref grid l c)0))
 
 
+;; fonction permettant de verifier que colone ligne et valeur sont des donné crédible.
+;;
+;; permet une forte robustesse du main le joueur ne fera pas craché le jeux en tapant nimporte quoi
+
+(defun triplet-valide (c l v)
+  (if (and(numberp c)
+	  (numberp l)
+	  (numberp v))
+      (if(and
+	  (and(<= c +SIZE+)(>= c 0))
+	  (and(<= l +SIZE+)(>= l 0))
+	  (and(<= v +SIZE+)(>= v 0)))
+	 T
+	 NIL)
+      NIL))
+
+
 ;; fonction qui gére le programme a chaque tour
+;;
+;;Voila comment se déroule le jeu:
+;;
+;;A chaque tour on rentre des coordonées dans la console et une valeur
+;;Si la valeur est égale a 0 c'est qu'on souhaite effacer un coup précédent on va alors verifier qu'il
+;;n'y avait pas de valeur sur la grille initial et effacer sinon on renvoi un message
+;;
+;;Si val vaut une valeur de 0 a 9 alors on regarde si le coup respecte les regle et si c'est le cas on plac e la valeur
+
 
 (defun play (grid grid-copy)
   (let ((c (progn
@@ -78,24 +105,31 @@
 	     (read))) 
 	(l  (read))
 	(valeur  (read)))
-    (setf c (transformation c)) ;transforme la lettre de la colone en chiffre 
-					;(voir fichier lecture)
-    (decf l)
-    (if (zerop valeur)
-	(if (test-delete-valeur grid grid-copy c l)
-	    (delete-valeur grid c l)
-	    (progn
-	      (format t "Impossible de supprimer cette valeur~% ")
-	      (play grid grid-copy)))
-	(if (test-valeur grid c l valeur)
-	    (set-valeur grid c l valeur)
-	    (progn
-	      (format t"Impossible d'atribuer cette valeur a cette case ~% ")
-	      (play grid grid-copy))))))
+    (setf c (transformation c))           ;transforme la lettre de la colone en chiffre 
+					  ;(voir fichier lecture)
+    (if(triplet-valide c l valeur)        ;permet d'éviter les erreurs en cas de mauvaise saisie
+       (progn
+	 (decf l)                         ; nous on vas de 0 a 8 pas de 1 a 9 (pour c la décrémentation se fait a la transformation
+	 (if (zerop valeur)
+	     (if (test-delete-valeur grid grid-copy c l)   ; cas ou on cherche a supprimer une valeur
+		 (delete-valeur grid c l)
+		 (progn
+		   (format t "Impossible de supprimer cette valeur~% ")
+		   (play grid grid-copy)))
+	     (if (test-valeur grid c l valeur)                ;cas ou on cherche a jouer
+		 (set-valeur grid c l valeur)
+		 (progn
+		   (format t"Impossible d'atribuer cette valeur a cette case ~% ")
+		   (play grid grid-copy)))))
+       (progn
+	 (format t"Vous avez rentré des valeur non valable ~%")
+	 (play grid grid-copy)))))
 
 
 
 ;; vérifie si une grille est finit d'etre remplit
+
+;;vu que le joueur ne peut placer de coup non valable une grille remplit signifie une grille réussie!
 
 (defun win (grid)
   (let ((c 0))
@@ -119,8 +153,9 @@
 ;;fonction qui fait la copie de la grid et lance le main
 
 (defun sudoku(grid)
-  (let ((g (grid-copy grid )))
-    (sudoku-main grid g)))
+  (let ((g (grid-copy grid )); on fait deux copie la premiere est celle sur laquel on va jouer sa évite de modifier la grille principal
+	(g2 (grid-copy grid)));la deuxieme permet de garder une copie de la grille initial pour savoir ou étais les valeur de départ
+    (sudoku-main g g2)))
 
 
 
