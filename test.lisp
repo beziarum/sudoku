@@ -1,8 +1,17 @@
-;;;Fichier de test
+
+;;;;;;;;;;;;;;;;;;;;;;;;;Test.lisp;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;
+;;;
+;;; Ce fichier contient les tests de certaine fonctions que nous
+;;; avons jugé bon de tester.
+;;;
+;;; Une fonction main lance l'intégralité des tests et renvoie
+;;; True si tous les tests sont réussis
+;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-
-;; test si grid-copy fonctionne
+;; teste si grid-copy fonctionne
 
 (defun test-copy-grid(grid)
   (let((g (grid-copy grid)))
@@ -11,9 +20,9 @@
 	NIL)))
 
 
-;;test si test-valeur fonctionne en lui passant une grid et une grid contenant
-;;toute la liste de possibilité et vérifie qu'elle peut la générer sans erreur
-;;Pour que ce test fonctionne les fonction test-collone test-ligne et test-care doive également etre fonctionnel
+;;teste si test-valeur fonctionne en lui passant une grid et une grid contenant
+;;toute la liste de possibilités et vérifie qu'elle peut la générer sans erreur
+;;Pour que ce test fonctionne, les fonctions test-collone test-ligne et test-carre doivent également etre fonctionnelles
 ;;On considerera donc que ce test vérifie aussi ces fonctions.
 
 (defun test-test-valeur (grid vrais-grid)
@@ -44,9 +53,9 @@
 
 
 
-;;test si init-standalone renvoit la bonne grille de possibilité de valeur de la grid passer en parametre
-;;cette fonction obtenant son résultat grace au fonction supprimer-colone supprimer-ligne supprimer-carre
-;; nous considérerons qu'elles fonctionnent également
+;;teste si init-standalone renvoie la bonne grille de possibilité de valeur de la grid passee en parametre
+;;cette fonction obtenant son résultat grace aux fonctions supprimer-colonne supprimer-ligne supprimer-carre
+;;nous considérerons qu'elles fonctionnent également
 
 (defun test-init-standalone (grid-test vrais-grid)
   (let ((pgrid (init-standalone grid-test)))
@@ -57,7 +66,7 @@
 
 
 
-;;lance tous les test
+;;lance tous les tests
 
 (defun main-test()
   (if (and(test-copy-grid +grid-test+)

@@ -1,10 +1,23 @@
 
-
-;;; 1ere strategie (aléatoire)
-;;; la stratégie joue un coup aléatoire parmi les coups autorisés
-
+;;;;;;;;;;;;;;;;;;;;;;;;;RandomStrat.lisp;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;
+;;; Ce fichier contient la 1ere strategie (aléatoire)
+;;; La stratégie joue un coup aléatoire parmi les coups autorisés
+;;; La stratégie est effectuée par la fonction test-random-strat
+;;; qui teste également la stratégie
+;;;
+;;; Il n'y a pas de fonction init-standalone et main-standalone 
+;;; car nous avons cru comprendre que ces modalités concernent uniquement 
+;;; la stratégie utilisée pour le tournoi
+;;;
+;;; Les complexités sont exprimées en fonction de +SIZE+ 
+;;;
+;;; Cette stratégie a une chance infiniment faible de résoudre un sudoku
+;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Fonction qui compte le nombre de cases vides dans un sudoku
+;; complexité : O(n²)
 
 (defun number-of-zeroes (grid)
   (let ((cpt 0))
@@ -16,6 +29,7 @@
 
 
 ;; fonction qui renvoie la position du n-ième zero du sudoku
+;; complexité : O(n²)
 
 (defun position-zero (grid n)
   (assert (<= n (number-of-zeroes grid)))
@@ -34,6 +48,7 @@
 
 
 ;; fonction qui renvoie une liste de probabilité selon une case
+;; complexité : O(n²)
 
 (defun possibility-list (grid colonne ligne)
   (assert (and (>= colonne 0) (< colonne +SIZE+)))
@@ -44,7 +59,9 @@
 	      (push (+ 1 i) l)))                            ; on la stock dans l
     l))
 
+
 ;; fonction qui détermine s'il existe un coup possible 
+;; complexité : O(n³)
 
 (defun is-possible (grid)
   (let ((bool NIL))
@@ -54,10 +71,14 @@
 			  (setf bool T))))                                 ; on passe le booléen à True
     bool))
 
-;; fonction qui effectue la stratégie sur la grille
+
+;; fonction qui renvoie les coordonées de la case dans laquelle 
+;; on veut jouer et la valeur à inscrire dedans
+;; la fonction renvoie NIL si il n'y a plus de coup à jouer
+;; complexité : O(n³)
 
 (defun random-strat (grid)
-  (if (is-possible grid)
+  (if (is-possible grid)                                                ; tant qu'on peut jouer
       (let ((place (random (number-of-zeroes grid))))                   ; place représente un zéro aléatoire
 	(incf place)                                                    ; on incrémente car il y a un décalage (on veut 0 < place <= number-of-zeroes)
 	(multiple-value-bind (j i) (position-zero grid place)           ; on récupère la position du zéro 
@@ -68,7 +89,8 @@
   (progn (print "plus de valeur possible") NIL)))     
 
 
-;; fonction qui teste la stratégie aléatoire
+;; fonction qui exécute et teste la stratégie aléatoire
+;; complexité : O(n⁴)
 
 (defun test-random-strat ()
   (loop while (not (eq (random-strat +grid+) NIL))                      ; tant qu'il reste des possibilités
