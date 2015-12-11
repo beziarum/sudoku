@@ -1,5 +1,4 @@
-(load "affichage")
-(load "class.lisp")
+
 
 ;;; 1ere strategie (aléatoire)
 ;;; la stratégie joue un coup aléatoire parmi les coups autorisés
@@ -19,6 +18,7 @@
 ;; fonction qui renvoie la position du n-ième zero du sudoku
 
 (defun position-zero (grid n)
+  (assert (<= n (number-of-zeroes grid)))
   (let ((tmp n)                                       ; n (donc tmp) représente le n-ième zéro dans la grille
 	(k 0)                                         ; k et l sont les indices à renvoyer
 	(l 0))
@@ -36,6 +36,8 @@
 ;; fonction qui renvoie une liste de probabilité selon une case
 
 (defun possibility-list (grid colonne ligne)
+  (assert (and (>= colonne 0) (< colonne +SIZE+)))
+  (assert (and (>= colonne 0) (< colonne +SIZE+)))
   (let ((l '()))
     (loop for i below +SIZE+
        do (if (test-valeur grid colonne ligne (+ 1 i))      ; si la valeur est possible
@@ -44,8 +46,6 @@
 
 
 ;; fonction qui effectue la stratégie sur la grille
-
-;;;;;;;;;;;;;;warning a corriger tu met grid zn param mais tu l'utilise pas;;;;;;;;
 
 (defun random-strat (grid)
   (let ((place (random (number-of-zeroes grid))))                   ; place représente un zéro aléatoire
