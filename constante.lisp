@@ -1,7 +1,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;Sudoku.lisp;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;
 ;;;
-;;; Ce fichier contient les constantes du programme.
+;;; Ce fichier contient les constantes du programme
 ;;;
 ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -9,12 +9,12 @@
 ;;; Fichier contenant les constantes du programme
 
 
-;; taille initial des grille de jeux
+;; taille initialle des grilles de jeux
 (defparameter +SIZE+ 9)                    ; longueur d'un coté de la grille
-(defparameter +AREA+ (* +SIZE+ +SIZE+))    ; aire du la grille (nombre de case)
+(defparameter +AREA+ (* +SIZE+ +SIZE+))    ; aire de la grille (nombre de cases)
 (defparameter +CARRE-SIZE+ 3)              ; taille des sous carrés
 
-;;grille initial du jeux
+;;grille initialle du jeu
 
 (defparameter +grid+ 
   (make-array '(9 9) :initial-contents
