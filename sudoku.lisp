@@ -3,7 +3,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;Sudoku.lisp;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;
 ;;;
-;;; Ce fichier contient le code de la parti solo du programme.
+;;; Ce fichier contient le code de la partie solo du programme.
 ;;;  
 ;;; Les compléxités seront données en fonction de n pour n = +size+.
 ;;; +SIZE+ correspond a la longueur d'un coté de la grille
@@ -46,7 +46,7 @@
 ;; Si la valeur est égale a 0 c'est qu'on souhaite effacer un coup précédent on va alors verifier qu'il
 ;; n'y avait pas de valeur sur la grille initiale et effacer sinon on renvoie un message
 ;;
-;; Si val vaut une valeur de 0 a 9 alors on regarde si le coup respecte les regle et si c'est le cas on place la valeur
+;; Si val vaut une valeur de 0 a 9 alors on regarde si le coup respecte les regles et si c'est le cas on place la valeur
 ;; Complexité O(n)
 
 (defun play (grid grid-copy)

@@ -7,7 +7,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;Utilitaire.lisp;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;
 ;;;
-;;; Ce fichier contient le code de certaine fonction utilisé par sudoku.lisp
+;;; Ce fichier contient le code de certaines fonctions utilisées par sudoku.lisp
 ;;;  
 ;;; Les compléxités seront données en fonction de n pour n = +size+.
 ;;; +SIZE+ correspond a la longueur d'un coté de la grille
@@ -80,7 +80,7 @@
       T
       NIL))
 
-;; réatribue 0 a la case de coordonné c l
+;; réatribue 0 a la case de coordonnées c l
 
 (defun delete-valeur (grid c l)
   (setf(aref grid l c)0))

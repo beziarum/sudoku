@@ -2,7 +2,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;Test.lisp;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;
 ;;;
-;;; Ce fichier contient les tests de certaine fonctions que nous
+;;; Ce fichier contient les tests de certaines fonctions que nous
 ;;; avons jugé bon de tester.
 ;;;
 ;;; Une fonction main lance l'intégralité des tests et renvoie
@@ -27,7 +27,7 @@
 
 ;;teste si test-valeur fonctionne en lui passant une grid et une grid contenant
 ;;toute la liste de possibilités et vérifie qu'elle peut la générer sans erreur
-;;Pour que ce test fonctionne, les fonctions test-collone test-ligne et test-carre doivent également etre fonctionnelles
+;;Pour que ce test fonctionne, les fonctions test-colonne test-ligne et test-carre doivent également etre fonctionnelles
 ;;On considerera donc que ce test vérifie aussi ces fonctions.
 
 (defun test-test-valeur (grid vrais-grid)
