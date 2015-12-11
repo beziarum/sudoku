@@ -49,11 +49,11 @@
 
 (defun random-strat (grid)
   (let ((place (random (number-of-zeroes grid))))                   ; place représente un zéro aléatoire
-    (incf place)                                                    ; 
+    (incf place)                                                    ; on incrémente car il y a un décalage (on veut 0 < place <= number-of-zeroes)
     (multiple-value-bind (j i) (position-zero grid place)           ; on récupère la position du zéro 
       (let* ((l (possibility-list grid i j)))             
 	(if (eq l NIL)                                              
-	    (random-strat grid)                                                    ; si la liste de probabilité de la case est nulle, on renvoie NIL
-	    (values i j (nth (random (length l)) l)))))))  ; sinon on lui assigne un élément aléatoire de la liste de possibilité
+	    (random-strat grid)                                     ; si la liste de probabilité de la case est nulle, on rappelle la stratégie
+	    (values i j (nth (random (length l)) l)))))))           ; sinon on renvoie les coordonées de la case à modifier, et la valeur à lui assigner
   
 
