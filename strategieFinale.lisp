@@ -79,16 +79,17 @@
 ;;carré, si oui renvoie cette valeur, et nil sinon
 ;;O(n³)
 (defun inclusive-carre (grid i j)
-  (let ((possible (aref grid i j)))
-    (loop for x below 9 ;on a √n tours de boucles
-       if (/= i x)
-       do (loop for y below 9 ;idem
-	     if (/= j y)
+  (let ((possible (aref grid i j))
+	(xcarre (- i (mod i +CARRE-SIZE+)))
+	(ycarre (- j (mod j +CARRE-SIZE+))))
+    (Loop for x from xcarre below (+ xcarre +CARRE-SIZE+) ;on a √n tours de boucles
+       do (loop for y from ycarre below (+ ycarre +CARRE-SIZE+) ;idem
+	     if (or (/= j y) (/= i x))
 	     do (setf possible (set-difference possible
-					       (aref grid x y)))));O(n²)
+					       (aref grid x y)));O(n²)
     (if (null (cdr possible))
 	(car possible)
-	nil)))
+	nil)))))
 
 ;;prend en parametre une grille de possibilités et essaie d'y trouver
 ;;un coup jouable en utilisant la stratégie exlusive : si une des listes
