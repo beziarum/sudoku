@@ -1,10 +1,11 @@
 
-
 ;;; 1ere strategie (aléatoire)
 ;;; la stratégie joue un coup aléatoire parmi les coups autorisés
+;;; les complexités sont exprimées en fonction de +SIZE+ 
 
 
 ;; Fonction qui compte le nombre de cases vides dans un sudoku
+;; complexité : O(n²)
 
 (defun number-of-zeroes (grid)
   (let ((cpt 0))
@@ -16,6 +17,7 @@
 
 
 ;; fonction qui renvoie la position du n-ième zero du sudoku
+;; complexité : O(n²)
 
 (defun position-zero (grid n)
   (assert (<= n (number-of-zeroes grid)))
@@ -34,6 +36,7 @@
 
 
 ;; fonction qui renvoie une liste de probabilité selon une case
+;; complexité : O(n²)
 
 (defun possibility-list (grid colonne ligne)
   (assert (and (>= colonne 0) (< colonne +SIZE+)))
@@ -44,7 +47,9 @@
 	      (push (+ 1 i) l)))                            ; on la stock dans l
     l))
 
+
 ;; fonction qui détermine s'il existe un coup possible 
+;; complexité : O(n³)
 
 (defun is-possible (grid)
   (let ((bool NIL))
@@ -54,7 +59,9 @@
 			  (setf bool T))))                                 ; on passe le booléen à True
     bool))
 
+
 ;; fonction qui effectue la stratégie sur la grille
+;; complexité : O(n³)
 
 (defun random-strat (grid)
   (if (is-possible grid)
@@ -69,6 +76,7 @@
 
 
 ;; fonction qui teste la stratégie aléatoire
+;; complexité : O(n⁴)
 
 (defun test-random-strat ()
   (loop while (not (eq (random-strat +grid+) NIL))                      ; tant qu'il reste des possibilités
