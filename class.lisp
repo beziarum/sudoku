@@ -3,6 +3,7 @@
 (load "strategies")
 (load "strategy2")
 (load "constante")
+(load "test")
 
 ;;Effectue une copie d'une grille de jeux
 
@@ -70,6 +71,15 @@
 
 
 ;; fonction qui gére le programme a chaque tour
+;;
+;;Voila comment se déroule le jeu:
+;;
+;;a chaque tour on rentre des coordonées dans la console et une valeur
+;;Si la valeur est égale a 0 c'est qu'on souhaite effacer un coup précédent on va alors verifier qu'il
+;;n'y avait pas de valeur sur la grille initial et effacer sinon on renvoi un message
+;;
+;;Si val vaut une valeur de 0 a 9 alors on regarde si le coup respecte les regle et si c'est le cas on placve la valeur
+
 
 (defun play (grid grid-copy)
   (let ((c (progn
