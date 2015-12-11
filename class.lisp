@@ -10,11 +10,11 @@
 ;;;
 ;;; Ce fichier contient le principale code du jeu solo du programme.
 ;;;  
-;;; Les compléxitées seront données en fonction de n pour n = +size+.
+;;; Les compléxités seront données en fonction de n pour n = +size+.
 ;;; +SIZE+ correspond a la longueur d'un coté de la grille
 ;;;
-;;; Nous avons opté pour une implémentation principalement itérative jugant
-;;; jugant l'abstraction offerte par l'objet relativement peu intérréssente 
+;;; Nous avons opté pour une implémentation principalement itérative jugeant
+;;; l'abstraction offerte par l'objet relativement peu intérréssante 
 ;;; dans un projet de cette envergure.
 ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -48,7 +48,7 @@
 ;; Complexité O(n)
 (defun test-carre(grid c l valeur)
   (let ((x (- l (mod l +CARRE-SIZE+)))         ; retourne le coin supérieur du carré
-	(y (- c (mod c +CARRE-SIZE+))))        ;se qui nous permetra de le parcourir
+	(y (- c (mod c +CARRE-SIZE+))))        ; ce qui nous permetra de le parcourir
     (loop for i from x below (+ x +CARRE-SIZE+)
 	  always (loop for j from y below (+ y +CARRE-SIZE+)
 		       never (eq(aref grid i j)valeur)
