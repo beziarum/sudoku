@@ -1,3 +1,17 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;StrategieFinale.lisp;;;;;;;;;;;;;;;;;;;;;;;;
+;;;
+;;;
+;;; Ce fichier contient les fonction de notre stratégie finale.
+;;; Cette stratégie résout toutes les grilles proposés par le
+;;; programme de test du cremi mais pas toutes les grilles existantes
+;;; La stratégie de backtracking n'étant pas utilisé, les coups sont
+;;; trouvés assez rapidement
+;;;
+;;; Les différentes complexités sont indiqués en fonction du côté de
+;;; la grille, c'est à dire 9 dans le cas d'une grille standart.
+;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (defparameter +carre-size+ 3)
 
 ;;prend en parametre une grille de possibilité, une valeur et un
