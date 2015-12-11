@@ -45,6 +45,8 @@
 
 ;; fonction qui effectue la stratégie sur la grille
 
+;;;;;;;;;;;;;;warning a corriger tu met grid zn param mais tu l'utilise pas;;;;;;;;
+
 (defun random-strat (grid)
   (let ((place (random (number-of-zeroes grid))))                   ; place représente un zéro aléatoire
     (incf place)                                                    ; 
