@@ -48,12 +48,27 @@
 ;; fonction qui effectue la stratégie sur la grille
 
 (defun random-strat (grid)
-  (let ((place (random (number-of-zeroes grid))))                   ; place représente un zéro aléatoire
-    (incf place)                                                    ; on incrémente car il y a un décalage (on veut 0 < place <= number-of-zeroes)
-    (multiple-value-bind (j i) (position-zero grid place)           ; on récupère la position du zéro 
-      (let* ((l (possibility-list grid i j)))             
-	(if (eq l NIL)                                              
-	    (random-strat grid)                                     ; si la liste de probabilité de la case est nulle, on rappelle la stratégie
-	    (values i j (nth (random (length l)) l)))))))           ; sinon on renvoie les coordonées de la case à modifier, et la valeur à lui assigner
+  (if (is-possible grid)
+      (let ((place (random (number-of-zeroes grid))))                   ; place représente un zéro aléatoire
+	(incf place)                                                    ; on incrémente car il y a un décalage (on veut 0 < place <= number-of-zeroes)
+	(multiple-value-bind (j i) (position-zero grid place)           ; on récupère la position du zéro 
+	  (let* ((l (possibility-list grid i j)))             
+	    (if (eq l NIL)                                              
+		(random-strat grid)                                     ; si la liste de probabilité de la case est nulle, on rappelle la stratégie
+		(values i j (nth (random (length l)) l))))))           ; sinon on renvoie les coordonées de la case à modifier, et la valeur à lui assigner
+  (progn (print "plus de valeur possible") NIL)))     
   
+(defun is-possible (grid)
+  (let ((bool NIL))
+    (loop for i below 9
+	  do (loop for j below 9
+		   do (if (not (equalp (possibility-list grid i j) '()))
+			  (setf bool T))))
+    bool))
+				 
 
+(defun test-random-strat ()
+  (loop while (not (eq (random-strat +grid+) NIL))
+	do (multiple-value-bind (i j k) (random-strat +grid+)
+		 (set-valeur +grid+ i j k))))
+	     
