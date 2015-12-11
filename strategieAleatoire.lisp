@@ -1,8 +1,27 @@
 
-;;; 1ere strategie (aléatoire)
-;;; la stratégie joue un coup aléatoire parmi les coups autorisés
-;;; les complexités sont exprimées en fonction de +SIZE+ 
+;;;;;;;;;;;;;;;;;;;;;;;;;RandomStrat.lisp;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;
+;;; Ce fichier contient la 1ere strategie (aléatoire)
+;;; La stratégie joue un coup aléatoire parmi les coups autorisés
+;;; La stratégie est effectuée par la fonction test-random-strat
+;;; qui teste également la stratégie
+;;;
+;;; Il n'y a pas de fonction init-standalone et main-standalone 
+;;; car nous avons cru comprendre que ces modalités concernent uniquement 
+;;; la stratégie utilisée pour le tournoi
+;;;
+;;; Cette stratégie n'est pas implémentée dans un fichier indépendant
+;;; Elle ne pourra fonctionner sans "utilitaire.lisp"
+;;; Mais elle n'a pas pour but d'être utilisée pour le tournoi
+;;;
+;;; Les complexités sont exprimées en fonction de +SIZE+ 
+;;;
+;;; Cette stratégie a une chance infiniment faible de résoudre un sudoku
+;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(load "utilitaire")
+(load "constante")
 
 ;; Fonction qui compte le nombre de cases vides dans un sudoku
 ;; complexité : O(n²)
@@ -60,11 +79,13 @@
     bool))
 
 
-;; fonction qui effectue la stratégie sur la grille
+;; fonction qui renvoie les coordonées de la case dans laquelle 
+;; on veut jouer et la valeur à inscrire dedans
+;; la fonction renvoie NIL si il n'y a plus de coup à jouer
 ;; complexité : O(n³)
 
 (defun random-strat (grid)
-  (if (is-possible grid)
+  (if (is-possible grid)                                                ; tant qu'on peut jouer
       (let ((place (random (number-of-zeroes grid))))                   ; place représente un zéro aléatoire
 	(incf place)                                                    ; on incrémente car il y a un décalage (on veut 0 < place <= number-of-zeroes)
 	(multiple-value-bind (j i) (position-zero grid place)           ; on récupère la position du zéro 
@@ -75,7 +96,7 @@
   (progn (print "plus de valeur possible") NIL)))     
 
 
-;; fonction qui teste la stratégie aléatoire
+;; fonction qui exécute et teste la stratégie aléatoire
 ;; complexité : O(n⁴)
 
 (defun test-random-strat ()
