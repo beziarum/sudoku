@@ -1,5 +1,14 @@
-;;;Fichier de test
 
+;;;;;;;;;;;;;;;;;;;;;;;;;Test.lisp;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;
+;;;
+;;; Ce fichier contient les tests de certaine fonctions que nous
+;;; avons juger bon de tester.
+;;;
+;;; Une fonction main lance l'intégralité des test et renvoi
+;;; True si tous les tests sont réussi
+;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
 ;; test si grid-copy fonctionne
