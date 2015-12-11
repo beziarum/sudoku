@@ -1,4 +1,5 @@
 
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;RandomStrat.lisp;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;
 ;;; Ce fichier contient la 1ere strategie (aléatoire)
@@ -21,7 +22,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (load "utilitaire")
-(load "constante")
 
 ;; Fonction qui compte le nombre de cases vides dans un sudoku
 ;; complexité : O(n²)
@@ -93,17 +93,19 @@
 	    (if (eq l NIL)                                              
 		(random-strat grid)                                     ; si la liste de probabilité de la case est nulle, on rappelle la stratégie
 		(values i j (nth (random (length l)) l))))))            ; sinon on renvoie les coordonées de la case à modifier, et la valeur à lui assigner
-  (progn (print "plus de valeur possible") NIL)))     
+      (progn (print "plus de valeur possible")
+	     NIL)))     
 
 
 ;; fonction qui exécute et teste la stratégie aléatoire
 ;; complexité : O(n⁴)
 
 (defun test-random-strat ()
-  (loop while (not (eq (random-strat +grid+) NIL))                      ; tant qu'il reste des possibilités
-	do (multiple-value-bind (i j k) (random-strat +grid+)
-	     (set-valeur +grid+ i j k)))                                ; on joue
-  (if (is-possible +grid+)                                              ; on vérifie qu'il ne reste effectivement pas de possibilité
+  (let((g (grid-copy +grid+)))
+  (loop while (not (eq (random-strat g) NIL))                          ; tant qu'il reste des possibilités
+	do (multiple-value-bind (i j k) (random-strat g)
+	     (set-valeur g i j k)))                                ; on joue
+  (if (is-possible g)                                              ; on vérifie qu'il ne reste effectivement pas de possibilité
       NIL
-      T))
+      T)))
 	     

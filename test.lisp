@@ -11,6 +11,11 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
+(load "affichage")
+(load "utilitaire")
+;(load "strategieFinal")
+
+
 ;; teste si grid-copy fonctionne
 
 (defun test-copy-grid(grid)
