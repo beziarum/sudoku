@@ -5,7 +5,7 @@
 (load "constante")
 (load "test")
 
-;;Effectue une copie d'une grille de jeux
+;;Effectue une copie d'une grille de jeu
 
 
 (defun grid-copy (grid)
@@ -15,19 +15,19 @@
 		   do (setf (aref g i j)(aref grid i j))))
     g))
 
-;;test si la valeur est deja presente dans la colonne
+;;teste si la valeur est deja presente dans la colonne
 
 (defun test-colonne(grid c valeur)
   (loop for i below +SIZE+ never (eq(aref grid i c)valeur)
 	finally (return T)))
 
-;;test si la valeur est deja presente dans la ligne
+;;teste si la valeur est deja presente dans la ligne
 
 (defun test-ligne(grid l valeur)
   (loop for i below +SIZE+ never (eq (aref grid l i) valeur)
 	finally (return T)))
 
-;;test si la valeur est deja presente dans le carré
+;;teste si la valeur est deja presente dans le carré
 
 (defun test-carre(grid c l valeur)
   (let ((x (- l (mod l +CARRE-SIZE+)))
@@ -38,7 +38,7 @@
 		       finally(return T)))))
 
 
-;; vérifie si une valeur est permise par les regle du jeux dans la grid passé en parametre
+;; vérifie si une valeur est permise par les regles du jeu dans la grid passée en parametre
 
 (defun test-valeur (grid c l valeur)
   (if (and (test-ligne grid l valeur)
@@ -49,13 +49,13 @@
       T
       NIL))
 
-;;attribut une valeur a la grille
+;;attribue une valeur à la grille
 
 (defun set-valeur(grid c l valeur)
   (setf(aref grid l c)valeur))
 
 
-;;vérifie si on peut retirer la valeur (faut si valeur présente dans la grille de base)
+;;vérifie si on peut retirer la valeur (faux si valeur est présente dans la grille de base)
 
 (defun test-delete-valeur(grid grid-copy c l)
   (if (and
@@ -64,15 +64,15 @@
       T
       NIL))
 
-;; réatribut 0 a la case
+;; réatribue 0 a la case
 
 (defun delete-valeur (grid c l)
   (setf(aref grid l c)0))
 
 
-;; fonction permettant de verifier que colone ligne et valeur sont des donné crédible.
+;; fonction permettant de verifier que colonne ligne et valeur sont des données crédibles.
 ;;
-;; permet une forte robustesse du main le joueur ne fera pas craché le jeux en tapant nimporte quoi
+;; permet une forte robustesse du main : le joueur ne fera pas cracher le jeux en tapant nimporte quoi
 
 (defun triplet-valide (c l v)
   (if (and(numberp c)
@@ -87,15 +87,15 @@
       NIL))
 
 
-;; fonction qui gére le programme a chaque tour
+;; fonction qui gere le programme à chaque tour
 ;;
 ;;Voila comment se déroule le jeu:
 ;;
 ;;A chaque tour on rentre des coordonées dans la console et une valeur
 ;;Si la valeur est égale a 0 c'est qu'on souhaite effacer un coup précédent on va alors verifier qu'il
-;;n'y avait pas de valeur sur la grille initial et effacer sinon on renvoi un message
+;;n'y avait pas de valeur sur la grille initiale et effacer sinon on renvoie un message
 ;;
-;;Si val vaut une valeur de 0 a 9 alors on regarde si le coup respecte les regle et si c'est le cas on plac e la valeur
+;;Si val vaut une valeur de 0 a 9 alors on regarde si le coup respecte les regle et si c'est le cas on place la valeur
 
 
 (defun play (grid grid-copy)
@@ -119,17 +119,17 @@
 	     (if (test-valeur grid c l valeur)                ;cas ou on cherche a jouer
 		 (set-valeur grid c l valeur)
 		 (progn
-		   (format t"Impossible d'atribuer cette valeur a cette case ~% ")
+		   (format t"Impossible d'attribuer cette valeur à cette case ~% ")
 		   (play grid grid-copy)))))
        (progn
-	 (format t"Vous avez rentré des valeur non valable ~%")
+	 (format t"Vous avez rentré des valeurs non valables ~%")
 	 (play grid grid-copy)))))
 
 
 
-;; vérifie si une grille est finit d'etre remplit
+;; vérifie si une grille est finie d'etre remplie
 
-;;vu que le joueur ne peut placer de coup non valable une grille remplit signifie une grille réussie!
+;;comme le joueur ne peut placer de coup non valable une grille remplie, win signifie une grille réussie!
 
 (defun win (grid)
   (let ((c 0))
