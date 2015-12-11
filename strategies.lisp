@@ -31,7 +31,7 @@
 		  (setf l j)
 		  )))
     (values k l)))
-	      
+
 
 ;; fonction qui renvoie une liste de probabilité selon une case
 
@@ -53,9 +53,7 @@
     (multiple-value-bind (j i) (position-zero grid place)           ; on récupère la position du zéro 
       (let* ((l (possibility-list grid i j)))             
 	(if (eq l NIL)                                              
-	    NIL                                                     ; si la liste de probabilité de la case est nulle, on renvoie NIL
-	    (set-valeur grid i j (nth (random (length l)) l)))))))  ; sinon on lui assigne un élément aléatoire de la liste de possibilité
+	    (random-strat grid)                                                    ; si la liste de probabilité de la case est nulle, on renvoie NIL
+	    (values i j (nth (random (length l)) l)))))))  ; sinon on lui assigne un élément aléatoire de la liste de possibilité
   
 
-
-  
