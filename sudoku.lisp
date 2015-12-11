@@ -12,12 +12,21 @@
 ;;; l'abstraction offerte par l'objet relativement peu intérréssante 
 ;;; dans un projet de cette envergure.
 ;;;
+;;; Ce fichier permet de charger tous les fichiers du projet.
+;;; Cependant les autres fichiers chargent également leurs dépendences.
+;;; Nous avons veillé a ce qu'aucune boucle de chargement ne se forme.
+;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-
+;; Dépendences réelles du fichier
 (load "affichage")
 (load "constante")
 (load "utilitaire")
+
+;; Loads mis la uniquement pour permettre le chargement de tout le programme avec (load "sudoku")
+(load "test")
+(load "strategieFinale")
+(load "strategieAleatoire")
 
 
 ;; fonction permettant de verifier que colonne ligne et valeur sont des données crédibles.
