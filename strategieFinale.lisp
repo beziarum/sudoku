@@ -235,56 +235,6 @@
 		 (setf (aref grid (car ret) (cadr ret)) nil)
 		 (values-list ret)))))
 
-;;Les fonctions suivantes utilisent toutes une grille de probabilité commune
-(let ((pgrid nil))
-  ;;Initialise la grille de probabilité en suivant une grille donné en parametre
-  ;;O(n⁴)
-  (defun init-standalone (grid)
-    (setf pgrid (make-array '(9 9):initial-element '(1 2 3 4 5 6 7 8 9)))
-    (loop for i below 9
-       do (loop for j below 9
-	     do (if (/= (aref grid i j) 0)
-		    (progn
-		      (supprimer-colone pgrid (aref grid i j) j) ;O(n²)
-		      (supprimer-ligne pgrid (aref grid i j) i) ;O(n²)
-		      (supprimer-carre pgrid (aref grid i j) i j) ;(n²)
-		      (setf (aref pgrid i j) nil)))))
-    pgrid)
-
-  ;;Cette fonction vérifie si l'une des stratégies implémentés peut trouver un
-  ;;coup valide par rapport à la grille de probabilité interne (dans l'ordre :
-  ;;d'abord la stratégie exlusive, puis la stratégie inclusive si la première
-  ;;n'as pas trouvé de valeur possible), si aucun coups n'as été trouvé alors
-  ;;on va essayer de simplifier la grille et si on y arrive alors on relance
-  ;;la fonction depuis le début
-  ;;Si un coup possible a été trouvé alors il est renvoyé
-  (defun main-standalone ()
-    (let ((l (multiple-value-list (exclusive-strat pgrid)))) ;O(n²)
-      (if (null (car l))
-	  (setf l (multiple-value-list (inclusive-strat pgrid)))) ;O(n³)
-      (if (and (null (car l))
-	       (simplifier-sudoku pgrid)) ;O(;les fonction qui suivent ne sont exécutés
-	 do (loop for j below 9 always (null (caddr ret)) ;qu'une seule fois dans la fonction
-	       do (progn (setf ret (list i
-					 j
-					 (inclusive-colone grid i j))) ;O(n³)
-			 (if (null (caddr ret))
-			     
-			       (setf ret (list i
-					     j
-					     (inclusive-ligne grid i j)))) ;O(n³)
-			 (if (null (caddr ret))
-				   
-			     (setf ret (list i
-					     j
-					     (inclusive-carre grid i j))))))) ;O(n³)
-      (if (null (caddr ret))
-	  nil
-	  (progn (supprimer-colone grid (caddr ret) (cadr ret)) ;O(n²)
-		 (supprimer-ligne grid (caddr ret) (car ret)) ;O(n²)
-		 (supprimer-carre grid (caddr ret) (car ret) (cadr ret)) ;O(n²)
-		 (setf (aref grid (car ret) (cadr ret)) nil)
-		 (values-list ret)))))
 
 ;;Les fonction suivantes utilisent toutes une grille de probabilité commune
 (let ((pgrid nil))
