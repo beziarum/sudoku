@@ -1,0 +1,26 @@
+Projet Sudoku en Lisp 
+
+Créé par Paul Beziau, Antoine Borde, Martin Bazalgette
+Pour le cours de programmation 3 de l'université de Bordeaux
+
+
+I) Présentation
+
+Le projet comporte 2 modules ainsi qu'un jeu de tests.
+Le premier de ces modules est le jeu en lui même.
+Le second est une intelligence artifielle permettant de résoudre des sudokus.
+
+
+II) Utilisation
+
+Tout fichier chargera ses dépendances. 
+Mais on peut simplement exécuter l'instruction (load "sudoku.lisp") dans slime à la racine du projet,
+de manière à charger l'ensemble des fichiers.
+
+
+III) Tournoi
+
+La stratégie à exécuter pour le tournoi est implémentée dans le fichier strategieFinale.lisp
+
+
+Lien vers le dépot git : git@github.com:beziarum/sudoku.git
