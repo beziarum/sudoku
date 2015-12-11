@@ -1,6 +1,6 @@
-(load "constante")
+;(load "constante")
 ;(load "strategy2")
-(load "class")
+;(load "class")
 
 ;; test si grid-copy fonctionne
 
