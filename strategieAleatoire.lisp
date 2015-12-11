@@ -10,6 +10,10 @@
 ;;; car nous avons cru comprendre que ces modalités concernent uniquement 
 ;;; la stratégie utilisée pour le tournoi
 ;;;
+;;; Cette stratégie n'est pas implémentée dans un fichier indépendant
+;;; Elle ne pourra fonctionner sans "utilitaire.lisp"
+;;; Mais elle n'a pas pour but d'être utilisée pour le tournoi
+;;;
 ;;; Les complexités sont exprimées en fonction de +SIZE+ 
 ;;;
 ;;; Cette stratégie a une chance infiniment faible de résoudre un sudoku
