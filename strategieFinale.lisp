@@ -1,4 +1,4 @@
-;;;;;;;;;;;;;;;;;;;;;;;;;StrategieFinale.lisp;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;strategieFinale.lisp;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;
 ;;;
 ;;; Ce fichier contient les fonction de notre stratégie finale.
