@@ -1,13 +1,25 @@
-(defconstant +carre-size+ 3)
+(defparameter +carre-size+ 3)
 
+;;prend en parametre une grille de possibilité, une valeur et un
+;;numéro de colone, supprime toutes les occurences de e dans les
+;;listes de probabilités des cases situées sur la colonne j de la grille
 (defun supprimer-colone (grid e j)
   (loop for i below 9
      do (setf (aref grid i j) (remove e (aref grid i j)))))
 
+
+;;prend en parametre une grille de possibilité, une valeur et un
+;;numéro de ligne, supprime toutes les occurences de e dans les
+;;listes de probabilités des cases situées sur la ligne i de la grille
 (defun supprimer-ligne (grid e i)
   (loop for j below 9
      do (setf (aref grid i j) (remove e (aref grid i j)))))
 
+
+;;prend en parametre une grille de possibilité, une valeur et une
+;;position de case, supprime toutes les occurences de e dans les
+;;listes de probabilité des cases situés sur le même carré que la
+;;case donné en parametre
 (defun supprimer-carre (grid e x y)
   (let ((lcarrex (mod x +CARRE-SIZE+))
 	(lcarrey (mod y +CARRE-SIZE+)))
@@ -15,6 +27,10 @@
        do (loop for j from (- y lcarrey) below (- (+ y +CARRE-SIZE+) lcarrey)
 	     do (setf (aref grid i j) (remove e (aref grid i j)))))))
 
+;;Prend en parametre une grille de probabilité et une position de case, cherche
+;;si une seule des valeurs de la liste de possibilité de la case (i ; j) n'est
+;;pas situé dans les listes de possibilité des autres cases situés dans la même
+;;colone, si oui renvoi cette valeur, et nil sinon
 (defun inclusive-colone (grid i j)
   (let ((possible (aref grid i j)))
     (loop for y below 9
@@ -24,6 +40,10 @@
 	(car possible)
 	nil)))
 
+;;Prend en parametre une grille de probabilité et une position de case, cherche
+;;si une seule des valeurs de la liste de possibilité de la case (i ; j) n'est
+;;pas situé dans les listes de possibilité des autres cases situés dans la même
+;;ligne, si oui renvoi cette valeur, et nil sinon
 (defun inclusive-ligne (grid i j)
   (let ((possible (aref grid i j)))
     (loop for x below 9
@@ -33,6 +53,11 @@
 	(car possible)
 	nil)))
 
+
+;;Prend en parametre une grille de probabilité et une position de case, cherche
+;;si une seule des valeurs de la liste de possibilité de la case (i ; j) n'est
+;;pas situé dans les listes de possibilité des autres cases situés dans le même
+;;carré, si oui renvoi cette valeur, et nil sinon
 (defun inclusive-carre (grid i j)
   (let ((possible (aref grid i j)))
     (loop for x below 9
@@ -45,6 +70,13 @@
 	(car possible)
 	nil)))
 
+;;prend en parametre une grille de possibilités et essai d'y trouver
+;;un coup jouable en utilisant la stratégie exlusive : si une des listes
+;;de possibilité ne contient qu'un seul élément alors on est sûr que cet
+;;élément est situé sur la case correspondante, on met à jour alors les
+;;liste de possibilités des cases situés dans la même ligne, colone et
+;;dans le même carre, puis renvoi la valeur précédament trouvé ainsi que
+;;sa position.
 (defun exclusive-strat (grid)
     (let ((ret nil))
       (loop
@@ -62,6 +94,9 @@
 			     (setf (aref grid i j) nil)))))
       (values-list ret)))
 
+;;Prend en parametre une grille de possibilités et un numéro de colonne et la fonction
+;;simplifie cette grille pour cette colone.
+;;Elle renvoi T si une simplification a pu être faite, nil sinon
 (defun simplifier-colonne (grid i) 
   (let ((simp nil))
     (loop for y1 below 9
@@ -78,6 +113,9 @@
 			     (setf simp t)))))
     simp))
 
+;;Prend en parametre une grille de possibilités et un numéro de colonne et la fonction
+;;simplifie cette grille pour cette colone.
+;;Elle renvoi T si une simplification a pu être faite, nil sinon
 (defun simplifier-ligne (grid j)
   (let ((simp nil))
     (loop for x1 below 9
@@ -93,7 +131,10 @@
 						   (aref grid x2 j)))
 			     (setf simp t)))))
     simp))
-;; on lui donne le coins supérieur gauche d'un carre
+
+;;Prend en parametre une grille de possibilités et une position de case situé en
+;;haut à gauche d'un carre. La fonction tente alors de simplifier ce carre
+;;et renvoi T si elle y est arrivé, nil sinon
 (defun simplifier-carre (grid i j)
   (let ((simp nil))
     (loop for x1 from i below (+ 3 i)
@@ -116,6 +157,10 @@
 					       (setf simp t))))))))
     simp))
 
+
+;;Cette fonction essai de simplifier une grille de possibilité
+;;pour celà elle va simplifier chaque ligne, colone et carre.
+;;Elle renvoi T si une simplification a pu être faite, nil sinon.
 (defun simplifier-sudoku (grid)
   (let ((simp nil))
     (loop for n below 9
@@ -127,6 +172,13 @@
     simp))
 
 
+;;Cette fonction prend en parametre une grille de possibilités et
+;;essai d'y trouver un coup valide en utilisant la stratégie inclusive :
+;;si une valeur est présente dans une seule des listes de probabilités d'une
+;;même colone (ou grille, ou carre) alors on sait que cette valeur est situé
+;;à cet position. La fonction met alors à jour les listes de possibilité des
+;;cases situés sur la même ligne, colonne et carre, puis renvoi la valeur
+;;précédement trouvé ainsi que sa position.
 (defun inclusive-strat (grid)
     (let ((ret '(0 0 nil)))
       (loop for i below 9 always (null (caddr ret))
@@ -152,10 +204,10 @@
 		 (setf (aref grid (car ret) (cadr ret)) nil)
 		 (values-list ret)))))
 
-(let ((pgrid nil)
-      (travail-grid nil))
+;;Les fonction suivantes utilisent toutes une grille de probabilité commune
+(let ((pgrid nil))
+  ;;Initialise la grille de probabilité en suivant une grille donné en parametre
   (defun init-standalone (grid)
-    (setf travail-grid grid)
     (setf pgrid (make-array '(9 9):initial-element '(1 2 3 4 5 6 7 8 9)))
     (loop for i below 9
        do (loop for j below 9
@@ -164,10 +216,16 @@
 		      (supprimer-colone pgrid (aref grid i j) j)
 		      (supprimer-ligne pgrid (aref grid i j) i)
 		      (supprimer-carre pgrid (aref grid i j) i j)
-		      (setf (aref pgrid i j) nil))))))
+		      (setf (aref pgrid i j) nil)))))
+    pgrid)
 
-  (defun test ()
-    (inclusive-strat pgrid))
+  ;;Cette fonction vérifie si l'une des stratégies implémentés peut trouver un
+  ;;coup valide par rapport à la grille de probabilité interne (dans l'ordre :
+  ;;d'abord la stratégie exlusive, puis la stratégie inclusive si la première
+  ;;n'as pas trouvé de valeur possible), si aucun coups n'as été trouvé alors
+  ;;on va essayer de simplifier la grille et si on y arrive alors on relance
+  ;;la fonction depuis le début
+  ;;Si un coup possible a été trouvé alors il est renvoyé
   (defun main-standalone ()
     (let ((l (multiple-value-list (exclusive-strat pgrid))))
       (if (null (car l))
