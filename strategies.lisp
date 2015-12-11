@@ -44,6 +44,15 @@
 	      (push (+ 1 i) l)))                            ; on la stock dans l
     l))
 
+;; fonction qui détermine s'il existe un coup possible 
+
+(defun is-possible (grid)
+  (let ((bool NIL))
+    (loop for i below 9
+	  do (loop for j below 9
+		   do (if (not (equalp (possibility-list grid i j) '()))   ; si la liste de possibilité d'une case est non nulle
+			  (setf bool T))))                                 ; on passe le booléen à True
+    bool))
 
 ;; fonction qui effectue la stratégie sur la grille
 
@@ -55,20 +64,17 @@
 	  (let* ((l (possibility-list grid i j)))             
 	    (if (eq l NIL)                                              
 		(random-strat grid)                                     ; si la liste de probabilité de la case est nulle, on rappelle la stratégie
-		(values i j (nth (random (length l)) l))))))           ; sinon on renvoie les coordonées de la case à modifier, et la valeur à lui assigner
+		(values i j (nth (random (length l)) l))))))            ; sinon on renvoie les coordonées de la case à modifier, et la valeur à lui assigner
   (progn (print "plus de valeur possible") NIL)))     
-  
-(defun is-possible (grid)
-  (let ((bool NIL))
-    (loop for i below 9
-	  do (loop for j below 9
-		   do (if (not (equalp (possibility-list grid i j) '()))
-			  (setf bool T))))
-    bool))
-				 
+
+
+;; fonction qui teste la stratégie aléatoire
 
 (defun test-random-strat ()
-  (loop while (not (eq (random-strat +grid+) NIL))
+  (loop while (not (eq (random-strat +grid+) NIL))                      ; tant qu'il reste des possibilités
 	do (multiple-value-bind (i j k) (random-strat +grid+)
-		 (set-valeur +grid+ i j k))))
+	     (set-valeur +grid+ i j k)))                                ; on joue
+  (if (is-possible +grid+)                                              ; on vérifie qu'il ne reste effectivement pas de possibilité
+      NIL
+      T))
 	     
