@@ -1,5 +1,4 @@
 
-;;; les complexités sont exprimées en fonction de +SIZE+ 
 ;;;;;;;;;;;;;;;;;;;;;;;;;RandomStrat.lisp;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;
 ;;; Ce fichier contient la 1ere strategie (aléatoire)
