@@ -197,7 +197,6 @@
 (let ((pgrid nil))
   ;;Initialise la grille de probabilité en suivant une grille donné en parametre
   (defun init-standalone (grid)
-    (setf travail-grid grid)
     (setf pgrid (make-array '(9 9):initial-element '(1 2 3 4 5 6 7 8 9)))
     (loop for i below 9
        do (loop for j below 9
