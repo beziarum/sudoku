@@ -1,13 +1,13 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;strategieFinale.lisp;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;
 ;;;
-;;; Ce fichier contient les fonction de notre stratégie finale.
-;;; Cette stratégie résout toutes les grilles proposés par le
+;;; Ce fichier contient les fonctions de notre stratégie finale.
+;;; Cette stratégie résout toutes les grilles proposées par le
 ;;; programme de test du cremi mais pas toutes les grilles existantes
 ;;; La stratégie de backtracking n'étant pas utilisé, les coups sont
 ;;; trouvés assez rapidement
 ;;;
-;;; Les différentes complexités sont indiqués en fonction du côté de
+;;; Les différentes complexités sont indiquées en fonction du côté de
 ;;; la grille, c'est à dire 9 dans le cas d'une grille standart.
 ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -15,7 +15,7 @@
 (defparameter +carre-size+ 3)
 
 ;;prend en parametre une grille de possibilité, une valeur et un
-;;numéro de colone, supprime toutes les occurences de e dans les
+;;numéro de colonne, supprime toutes les occurences de e dans les
 ;;listes de probabilités des cases situées sur la colonne j de la grille
 ;;O(n²)
 (defun supprimer-colone (grid e j)
@@ -46,8 +46,8 @@
 
 ;;Prend en parametre une grille de probabilité et une position de case, cherche
 ;;si une seule des valeurs de la liste de possibilité de la case (i ; j) n'est
-;;pas situé dans les listes de possibilité des autres cases situés dans la même
-;;colone, si oui renvoi cette valeur, et nil sinon
+;;pas située dans les listes de possibilité des autres cases situés dans la même
+;;colonne, si oui renvoie cette valeur, et nil sinon
 ;;O(n³)
 (defun inclusive-colone (grid i j)
   (let ((possible (aref grid i j)))
@@ -60,8 +60,8 @@
 
 ;;Prend en parametre une grille de probabilité et une position de case, cherche
 ;;si une seule des valeurs de la liste de possibilité de la case (i ; j) n'est
-;;pas situé dans les listes de possibilité des autres cases situés dans la même
-;;ligne, si oui renvoi cette valeur, et nil sinon
+;;pas située dans les listes de possibilité des autres cases situés dans la même
+;;ligne, si oui renvoie cette valeur, et nil sinon
 ;;O(n³)
 (defun inclusive-ligne (grid i j)
   (let ((possible (aref grid i j)))
@@ -75,8 +75,8 @@
 
 ;;Prend en parametre une grille de probabilité et une position de case, cherche
 ;;si une seule des valeurs de la liste de possibilité de la case (i ; j) n'est
-;;pas situé dans les listes de possibilité des autres cases situés dans le même
-;;carré, si oui renvoi cette valeur, et nil sinon
+;;pas située dans les listes de possibilité des autres cases situés dans le même
+;;carré, si oui renvoie cette valeur, et nil sinon
 ;;O(n³)
 (defun inclusive-carre (grid i j)
   (let ((possible (aref grid i j)))
@@ -90,12 +90,12 @@
 	(car possible)
 	nil)))
 
-;;prend en parametre une grille de possibilités et essai d'y trouver
+;;prend en parametre une grille de possibilités et essaie d'y trouver
 ;;un coup jouable en utilisant la stratégie exlusive : si une des listes
 ;;de possibilité ne contient qu'un seul élément alors on est sûr que cet
 ;;élément est situé sur la case correspondante, on met à jour alors les
-;;liste de possibilités des cases situés dans la même ligne, colone et
-;;dans le même carre, puis renvoi la valeur précédament trouvé ainsi que
+;;liste de possibilités des cases situés dans la même ligne, colonne et
+;;dans le même carre, puis renvoie la valeur précédemment trouvé ainsi que
 ;;sa position.
 ;;O(n²)
 (defun exclusive-strat (grid)
@@ -104,7 +104,7 @@
 	 for i below 9 always (null ret)
 	 do (loop
 	       for j below 9 always (null ret)
-	       do (if (and (null (cdr (aref grid i j)))        ;on exécute les fonction qui suivent 
+	       do (if (and (null (cdr (aref grid i j)))        ;on exécute les fonctions qui suivent 
 			   (not (null (car (aref grid i j))))) ;une seule fois dans la fonction
 		      (progn (setf ret (list i
 					     j
@@ -116,7 +116,7 @@
       (values-list ret)))
 
 ;;Prend en parametre une grille de possibilités et un numéro de colonne et la fonction
-;;simplifie cette grille pour cette colone.
+;;simplifie cette grille pour cette colonne.
 ;;Elle renvoi T si une simplification a pu être faite, nil sinon
 ;;O(n⁵)
 (defun simplifier-colonne (grid i) 
@@ -155,7 +155,7 @@
 			     (setf simp t)))))
     simp))
 
-;;Prend en parametre une grille de possibilités et une position de case situé en
+;;Prend en parametre une grille de possibilités et une position de case située en
 ;;haut à gauche d'un carre. La fonction tente alors de simplifier ce carre
 ;;et renvoi T si elle y est arrivé, nil sinon
 ;;O(n⁵)
@@ -182,7 +182,7 @@
     simp))
 
 ;;Cette fonction essai de simplifier une grille de possibilité
-;;pour celà elle va simplifier chaque ligne, colone et carre.
+;;pour celà elle va simplifier chaque ligne, colonne et carre.
 ;;Elle renvoi T si une simplification a pu être faite, nil sinon.
 ;;Pour celà elle utilise la technique des paires exclusives
 ;;Si deux cases dans une même zone (c'est à dire une colonne, une
@@ -235,7 +235,7 @@
 		 (setf (aref grid (car ret) (cadr ret)) nil)
 		 (values-list ret)))))
 
-;;Les fonction suivantes utilisent toutes une grille de probabilité commune
+;;Les fonctions suivantes utilisent toutes une grille de probabilité commune
 (let ((pgrid nil))
   ;;Initialise la grille de probabilité en suivant une grille donné en parametre
   ;;O(n⁴)
