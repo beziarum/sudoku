@@ -23,4 +23,6 @@ III) Tournoi
 La stratégie à exécuter pour le tournoi est implémentée dans le fichier strategieFinale.lisp
 
 
+La grille standart pour jouer s'appelle +grid+ et se trouve dans le fichier constante
+
 Lien vers le dépot git : git@github.com:beziarum/sudoku.git
