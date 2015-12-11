@@ -178,7 +178,7 @@
   (afficher-sudoku grid)
   (play grid g)
   (if (win +grid+)
-      (princ "vous avez gagné")
+      (format t "vous avez gagné ~%")
       (sudoku-main grid g)))
 
 ;;fonction qui fait la copie de la grid et lance le main
