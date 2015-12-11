@@ -37,7 +37,7 @@
   (labels ((intern-test-strat ()
 	     (multiple-value-bind (i j v) (time (funcall main))
 	       (if (not (null v))
-		   (progn (setf (aref grid j i) v)
+		   (progn (setf (aref grid i j) v)
 			  (afficher-sudoku grid)
 			  (intern-test-strat))))))
     (intern-test-strat)
