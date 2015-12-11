@@ -13,7 +13,7 @@
 
 (load "affichage")
 (load "utilitaire")
-;(load "strategieFinal")
+(load "strategieFinale")
 
 
 ;; teste si grid-copy fonctionne
@@ -41,11 +41,11 @@
 
 
 
-
 ;;vérifie si une stratégie marche en lui donnant une grille particulière
 
 (defun test-strat (init main grid)
   (let ((g (grid-copy grid)))
+    (afficher-sudoku g)
     (funcall init g)
     (labels ((intern-test-strat ()
 	       (multiple-value-bind (i j v) (funcall main)
@@ -71,7 +71,7 @@
 
 
 
-;;lance tous les tests
+;;lance tous les tests et retourne T si ils sont tous passés
 
 (defun main-test()
   (if (and(test-copy-grid +grid-test+)

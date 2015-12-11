@@ -97,3 +97,34 @@
 		 ((null (cdr l)) n)
 		 (T (tInter c (1+ n) (cdr l))))))
     (tInter c 0 '(A B C D E F G H I))))
+
+
+
+;; Fonction qui vérifie si une grille finit est vraiment juste.
+;; On utilisera cette fonction dans les tests mais pas dans sudoku
+;; car elle est plus complexe que la fonction win de sudoku
+;; Complexité O(n³)
+ 
+
+(defun win-test(grid)
+  (let ((c T))
+  (loop for i below +SIZE+
+	do (loop for j below +SIZE+                                        ;O(n²)
+		 do (if (not(and(test-ligne grid j (aref grid i j))        ;O(n)
+			    (test-colonne grid i (aref grid i j))          ;O(n)
+			    (test-carre grid j i (aref grid i j))
+			    (and(< (aref grid i j) 10)(>(aref grid i j) 0))))
+			(setf c nil))))
+    c))
+
+;; vérifie si une grille est remplie
+;;comme le joueur ne peut placer de coup non valable, une grille remplie signifie une grille réussie !
+;;Complexité O(n²)
+
+(defun win (grid)
+  (let ((c t))
+    (loop for i below +SIZE+
+	  do (loop for j below +SIZE+
+		   do (if (eq(aref grid i j)0)
+			  (setf c NIL))))
+    c))

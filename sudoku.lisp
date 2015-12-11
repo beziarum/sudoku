@@ -77,21 +77,6 @@
 	 (play grid grid-copy)))))
 
 
-
-;; vérifie si une grille est remplie
-;;comme le joueur ne peut placer de coup non valable, une grille remplie signifie une grille réussie !
-;;Complexité O(n²)
-
-(defun win (grid)
-  (let ((c 0))
-    (loop for i below +SIZE+
-	  do (loop for j below +SIZE+
-		   do (if (not(eq(aref grid i j)0))
-			  (incf c))))
-    (if (eq c +AREA+)
-	T
-	NIL)))
-
 ;; fonction main
 
 (defun sudoku-main (grid g)
